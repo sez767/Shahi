@@ -239,7 +239,10 @@ void TSlon::CalcRP(const Position5* p)
 		if((x-i)<0 || (y+i)>7)break;
 		int f = p5.WhoIs(x-i, y+i);
 		if( f<5){ // здесь стоит фигура
-			if(color==Board.Fig[f]->color){CF[Ccnt].x=x-i; CF[Ccnt].y=y+i; Ccnt++;}
+			if(color==Board.Fig[f]->color){
+				CF[Ccnt].x=x-i;
+				CF[Ccnt].y=y+i;
+				Ccnt++;}
 			break;
 		}
 		RP[Rcnt].x=x-i; RP[Rcnt].y=y+i; Rcnt++;
@@ -301,9 +304,9 @@ int Mat()
 	Board.SetPosition(&p5); // берем з доски
 	Board.Fig[0]->CalcRP(&p5);
 	Board.Fig[0]->KingCorrect(&p5);
-	// шах белому королю 
+	
 	if (p5.OnOtherField(Board.Fig[0]->x, Board.Fig[0]->y, 0)){
-		if (Board.Fig[0]->Rcnt == 0)return 1;
+		if (Board.Fig[0]->Rcnt == 0)return 1;// шах 
 	}
 	else{
 		if (Board.Fig[0]->Rcnt == 0)return 2;// цейтнот
@@ -363,54 +366,56 @@ int Evaluate(TBoard* b)
 	int dd = abs(b->Fig[0]->x - b->Fig[1]->x) + abs(b->Fig[0]->y - b->Fig[1]->y);
 	v += (14-dd);//4
 	
-	// зажим белого короля черной турой
-	int S = 0;
-	int xL = b->Fig[3]->x; int yL = b->Fig[3]->y; // ладья
-	int xK = b->Fig[0]->x; int yK = b->Fig[0]->y; // король бел
-	if(xK<xL && yK<yL){
-		for(int x=1;x<xL;x++)if(b->Fig[1]->x==x && b->Fig[1]->y==yL)break;
-		for(int y=1;y<yL;y++)if(b->Fig[1]->x==xL && b->Fig[1]->y==y)break;
-		for(int x=1;x<xL;x++)if(b->Fig[2]->x==x && b->Fig[2]->y==yL)break;
-		for(int y=1;y<yL;y++)if(b->Fig[2]->x==xL && b->Fig[2]->y==y)break;
-		for(int x=1;x<xL;x++)if(b->Fig[4]->x==x && b->Fig[4]->y==yL)break;
-		for(int y=1;y<yL;y++)if(b->Fig[4]->x==xL && b->Fig[4]->y==y)break;
+	// зажим белого короля черной ладьей
+	if (b->Fig[3]->Enbl) {
+		int S = 0;
+		int xL = b->Fig[3]->x; int yL = b->Fig[3]->y; // ладья
+		int xK = b->Fig[0]->x; int yK = b->Fig[0]->y; // король б
+		if (xK < xL && yK < yL) {
+			for (int x = 1; x < xL; x++)if (b->Fig[1]->x == x && b->Fig[1]->y == yL)break;
+			for (int y = 1; y < yL; y++)if (b->Fig[1]->x == xL && b->Fig[1]->y == y)break;
+			for (int x = 1; x < xL; x++)if (b->Fig[2]->x == x && b->Fig[2]->y == yL)break;
+			for (int y = 1; y < yL; y++)if (b->Fig[2]->x == xL && b->Fig[2]->y == y)break;
+			for (int x = 1; x < xL; x++)if (b->Fig[4]->x == x && b->Fig[4]->y == yL)break;
+			for (int y = 1; y < yL; y++)if (b->Fig[4]->x == xL && b->Fig[4]->y == y)break;
 
-		S=xL*yL; // left-top
+			S = xL * yL; // left-top
+		}
+
+		if (xK > xL&& yK < yL) {
+			for (int x = xL + 1; x < 7; x++)if (b->Fig[1]->x == x && b->Fig[1]->y == yL)break;
+			for (int y = 0; y < yL; y++)if (b->Fig[1]->x == xL && b->Fig[1]->y == y)break;
+			for (int x = xL + 1; x < 7; x++)if (b->Fig[2]->x == x && b->Fig[2]->y == yL)break;
+			for (int y = 0; y < yL; y++)if (b->Fig[2]->x == xL && b->Fig[2]->y == y)break;
+			for (int x = xL + 1; x < 7; x++)if (b->Fig[4]->x == x && b->Fig[4]->y == yL)break;
+			for (int y = 0; y < yL; y++)if (b->Fig[4]->x == xL && b->Fig[4]->y == y)break;
+
+			S = (7 - xL) * yL; // right-top
+		}
+
+		if (xK > xL&& yK > yL) {
+			for (int x = xL + 1; x < 7; x++)if (b->Fig[1]->x == x && b->Fig[1]->y == yL)break;
+			for (int y = yL + 1; y < 7; y++)if (b->Fig[1]->x == xL && b->Fig[1]->y == y)break;
+			for (int x = xL + 1; x < 7; x++)if (b->Fig[2]->x == x && b->Fig[2]->y == yL)break;
+			for (int y = yL + 1; y < 7; y++)if (b->Fig[2]->x == xL && b->Fig[2]->y == y)break;
+			for (int x = xL + 1; x < 7; x++)if (b->Fig[4]->x == x && b->Fig[4]->y == yL)break;
+			for (int y = yL + 1; y < 7; y++)if (b->Fig[4]->x == xL && b->Fig[4]->y == y)break;
+
+			S = (7 - xL) * (7 - yL); // right-down
+		}
+		if (xK<xL && yK>yL) {
+			for (int x = 1; x < xL; x++)if (b->Fig[1]->x == x && b->Fig[1]->y == yL)break;
+			for (int y = yL + 1; y < 7; y++)if (b->Fig[1]->x == xL && b->Fig[1]->y == y)break;
+			for (int x = 1; x < xL; x++)if (b->Fig[2]->x == x && b->Fig[2]->y == yL)break;
+			for (int y = yL + 1; y < 7; y++)if (b->Fig[2]->x == xL && b->Fig[2]->y == y)break;
+			for (int x = 1; x < xL; x++)if (b->Fig[4]->x == x && b->Fig[4]->y == yL)break;
+			for (int y = yL + 1; y < 7; y++)if (b->Fig[4]->x == xL && b->Fig[4]->y == y)break;
+
+			S = xL * (7 - yL); // left-down
+		}
+		int qq = (49 - S) / 3;//2
+		if (S > 0)v += qq;
 	}
-
-	if(xK>xL && yK<yL){
-		for(int x=xL+1;x<7;x++)if(b->Fig[1]->x==x && b->Fig[1]->y==yL)break;
-		for(int y=0;y<yL;y++)if(b->Fig[1]->x==xL && b->Fig[1]->y==y)break;
-		for(int x=xL+1;x<7;x++)if(b->Fig[2]->x==x && b->Fig[2]->y==yL)break;
-		for(int y=0;y<yL;y++)if(b->Fig[2]->x==xL && b->Fig[2]->y==y)break;
-		for(int x=xL+1;x<7;x++)if(b->Fig[4]->x==x && b->Fig[4]->y==yL)break;
-		for(int y=0;y<yL;y++)if(b->Fig[4]->x==xL && b->Fig[4]->y==y)break;
-
-		S=(7-xL)*yL; // right-top
-	}
-
-	if(xK>xL && yK>yL){
-		for(int x=xL+1;x<7;x++)if(b->Fig[1]->x==x && b->Fig[1]->y==yL)break;
-		for(int y=yL+1;y<7;y++)if(b->Fig[1]->x==xL && b->Fig[1]->y==y)break;
-		for(int x=xL+1;x<7;x++)if(b->Fig[2]->x==x && b->Fig[2]->y==yL)break;
-		for(int y=yL+1;y<7;y++)if(b->Fig[2]->x==xL && b->Fig[2]->y==y)break;
-		for(int x=xL+1;x<7;x++)if(b->Fig[4]->x==x && b->Fig[4]->y==yL)break;
-		for(int y=yL+1;y<7;y++)if(b->Fig[4]->x==xL && b->Fig[4]->y==y)break;
-
-		S=(7-xL)*(7-yL); // right-down
-	}
-	if(xK<xL && yK>yL){
-		for(int x=1;x<xL;x++)if(b->Fig[1]->x==x && b->Fig[1]->y==yL)break;
-		for(int y=yL+1;y<7;y++)if(b->Fig[1]->x==xL && b->Fig[1]->y==y)break;
-		for(int x=1;x<xL;x++)if(b->Fig[2]->x==x && b->Fig[2]->y==yL)break;
-		for(int y=yL+1;y<7;y++)if(b->Fig[2]->x==xL && b->Fig[2]->y==y)break;
-		for(int x=1;x<xL;x++)if(b->Fig[4]->x==x && b->Fig[4]->y==yL)break;
-		for(int y=yL+1;y<7;y++)if(b->Fig[4]->x==xL && b->Fig[4]->y==y)break;
-
-		S=xL*(7-yL); // left-down
-	}
-	int qq=(49 - S)/3;//2
-	if (S > 0 )v += qq;
 
 
 	//===== не под ударом ли черные фигуры------
@@ -639,37 +644,40 @@ void Move(TMove* pM)
 	
 }
 
-char* figura[] = {"W_Kor","B_Kor", "B_Slon", "B_Tura", "B_Kon"};
-
+char figura[5][10] = {"W_Kor","B_Kor", "B_Slon", "B_Tura", "B_Kon"};
+int count = 1;
 int MakeNextMove(){
 	tt_cnt++;
 	char txt[100];
 	TMove m = BestMove2();
 	int mov = m.x;
-	memo.print("%s to %c:%d \n", figura[m.i], (m.x)+65, (m.y)+1);
-	//sprintf(txt, "%c:%d", (m.x) + 65, (m.y) + 1);
-	//MyTextBIG(850, 600, txt);
+	memo.print("%d. %s moves to %c:%d \n", count,figura[m.i], (m.x)+65, (m.y)+1);///////////////////
 	Move(&m);
 	int mt = Mat();
 	if (mt == 1)
 		if (H == 1) {
 		mov = mt; 
-			
-		sprintf(txt,"MAT!!! in %d",tt_cnt); //halfways
-		MyTextBIG(950, 600, txt);
-		PlaySound("mario.wav", NULL, SND_ASYNC | SND_FILENAME);
-		printf("\nMAT"); // сделан ход черными
+		
+		//sprintf(txt,"MAT!!! in %d",tt_cnt); //halfways
+		//MyTextBIG(950, 600, txt);
+		PlaySound("src/mario.wav", NULL, SND_ASYNC | SND_FILENAME);
+		memo.print("   <<< MAT! >>> in %d halfmoves", count);
+		printf("\nMAT");
+		matFlg = 1;
 	}
 	if (mt==2)
 		if(H == 1){
 		mov = mt;
-		sprintf(txt, "Ceinot!   in  %d", tt_cnt);
-		MyTextBIG(850, 600, txt);
-		PlaySound("mario.wav", NULL, SND_ASYNC | SND_FILENAME);
+		matFlg = 1;
+		//sprintf(txt, "Ceinot!   in  %d", tt_cnt);
+		//MyTextBIG(850, 600, txt);
+		memo.print("   <<< Ceinot! >>> in %d halfmoves", count);
+		PlaySound("src/mario.wav", NULL, SND_ASYNC | SND_FILENAME);
 		printf("\nCeitnot!!!");} 
-
+	
 	SavePos();
 	H *= -1;
+	count++;
 	return mt;
 }
 

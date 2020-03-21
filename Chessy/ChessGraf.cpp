@@ -14,11 +14,11 @@ ImgTexture KingWt_txr;
 int ind;
 
 void init_img(){
-	KingBl_txr.LoadFromFile(L"img/King_bl.png");
-	SlonBl_txr.LoadFromFile(L"img/Slon_bl.png");
-	TuraBl_txr.LoadFromFile(L"img/Tura_bl.png");
-	KonjBl_txr.LoadFromFile(L"img/Konj_bl.png");
-	KingWt_txr.LoadFromFile(L"img/King_wt.png");
+	KingBl_txr.LoadFromFile(L"src/King_bl.png");
+	SlonBl_txr.LoadFromFile(L"src/Slon_bl.png");
+	TuraBl_txr.LoadFromFile(L"src/Tura_bl.png");
+	KonjBl_txr.LoadFromFile(L"src/Konj_bl.png");
+	KingWt_txr.LoadFromFile(L"src/King_wt.png");
 
 }//---------
 
@@ -233,24 +233,23 @@ void PrintHelp()//в консоль, вже не нада
 void PrintHelpInWindow(int x, int y)
 {
 	int dy = 29; // расстояние между строками
-	char t1[]="\n\nDRUG&DROP chessmans on board";  MyText(x, y+=dy, t1);
+	char t0[] = "\n                      WELCOME";  MyText(x, y += dy, t0);
+	char t1[]="\nDRUG&DROP chessmans on board";  MyText(x, y+=dy, t1);
 	//char t6[]="\ntest test test"; MyText(x, y+=dy, t6);
+	char t17[] = "\nSPACE - make move"; MyText(x, y += dy, t17);
 	char t8[] = "\nR - random position";  MyText(x, y += dy, t8);
-	char t17[]="\nSpace - make move"; MyText(x, y+=dy, t17);
-	char t3[]="\nF4 - move back";  MyText(x, y+=dy, t3);
-	char t2[]= "\nF9 - test 950 moves"; MyText(x, y+=dy, t2);
-	char t4[]="\nup - move log up"; MyText(x, y+=dy, t4);
-	char t14[] = "\ndown - move log down"; MyText(x, y += dy, t14);
-	char t5[]="\n7 - test random 100 games in console";  MyText(x, y+=dy, t5);
-	
-	char t7[]="\nh - change color move (black-white)"; MyText(x, y+=dy, t7);
-	
-	char t8a[]="\nEsc - reset memory position";  MyText(x, y+=dy, t8a);
-	char t9[]="\n1  White King moves and Control filds";  MyText(x, y+=dy, t9);
-	char t10[]="\n2  Black King moves and Control filds"; MyText(x, y+=dy, t10);
-	char t11[]="\n3  Black BISHOP moves and Control filds"; MyText(x, y+=dy, t11);
-	char t12[]="\n4  Black ROOK moves and Control filds";  MyText(x, y+=dy, t12);
-	char t13[]="\n5  Black KNIGHT moves and Control filds"; MyText(x, y+=dy, t13);
-	
+	//char t3[]="\nF4 - move back";  MyText(x, y+=dy, t3);
+	char t2[]= "\nQ - quick results (to 950 halfmoves)"; MyText(x, y+=dy, t2);
+	char t8a[] = "\nESC - reset position";  MyText(x, y += dy, t8a);
+	char t4[]="\nUP - move log up"; MyText(x, y+=dy, t4);
+	char t14[] = "\nDOWN - move log down"; MyText(x, y += dy, t14);
+	char t7[]="\nH - change side"; MyText(x, y+=dy, t7);
+	char t9[]="\n1 - White king moves and control filds";  MyText(x, y+=dy, t9);
+	char t10[]="\n2 - Black king moves and control filds"; MyText(x, y+=dy, t10);
+	char t11[]="\n3 - Black bishop moves and control filds"; MyText(x, y+=dy, t11);
+	char t12[]="\n4 - Black rook moves and control filds";  MyText(x, y+=dy, t12);
+	char t13[]="\n5 - Black knight moves and control filds"; MyText(x, y+=dy, t13);
+	//char t33[] = "\n";  MyText(x, y += dy, t33);
+	char t5[]="\n\n MOVES :";  MyText(x, y+=dy, t5);
 
 }

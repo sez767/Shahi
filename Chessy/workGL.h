@@ -33,6 +33,8 @@ extern Color Korr;
 extern Color SwKorr;
 extern Color GrBlu;
 extern Color WinFon;
+extern Color ClrRamka;
+extern Color ClrRmkFon;
 
 extern int Stop;
 
@@ -46,6 +48,7 @@ void Shess_Draw();
 void MyText(int x, int y, const char* txt);
 void MyTextBIG(int x, int y, const char* txt);
 void MyTextKor(int x, int y, const char* txt);
+void MyTextBl(int x, int y, const char* txt);
 void PrintHelpInWindow(int x, int y);
 void DrawFonRect();
 void PrintRow(int x, int y);

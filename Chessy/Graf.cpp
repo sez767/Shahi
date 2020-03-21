@@ -6,7 +6,6 @@
 #include "gdiplusgpstubs.h"
 #include "gdipluspen.h"
 #include "gdipluscolor.h"
-
 #include "Chess.h"
 
 Color Blue(0,0,255);
@@ -17,6 +16,8 @@ Color SwKorr(240,227,176);//
 Color Korr(153,102,0);//
 Color GrBlu(191,191,255);//
 Color WinFon(200,200,200);
+Color ClrRamka(255, 100, 100, 255);
+Color ClrRmkFon(255, 240, 240, 240);
 
 // тут стандарни ГДИ функции для малювання прямокутникив, лыный
 
@@ -46,11 +47,9 @@ void Draw(){
 	Shess_Draw();
 }
 
-TMemo10 memo(780, 530, 470, 148); // x,y,ширина, высота
-void TMemo10::ClearBar()
-{
-    Bar(x, y, x + w, y + h, WinFon); //WinFon
-
+TMemo10 memo(898, 520, 359, 120); // x,y,ширина, высота
+void TMemo10::ClearBar(){
+    Bar(x, y, x + w, y + h, ClrRmkFon); //WinFon
 // RectAng(x, y, x + w, y + h, цвет);
 }
 
@@ -59,8 +58,6 @@ void TMemo10::Clear()
     ind = 0; tp = 0;
     ClearBar();
 }
-
-
 
 void TMemo10::print(const char* Format, ...)
 {
@@ -80,7 +77,7 @@ void TMemo10::print(const char* Format, ...)
         ind = 100;
     }
 
-    if (ind > 7) { tp = ind - 7; }
+    if (ind > 5) { tp = ind - 5; }
     else { if (ind == 100)tp = 92; }
 
     for (int i = 0; i < 7; i++) {
@@ -95,9 +92,82 @@ void TMemo10::Draw()
     if (offset > 93)offset = 93;
     if ((tp - offset) < 0)offset = tp;
     ClearBar();
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 5; i++) {
         MyText(x + 4, y + i * dy + 4, string[tp + i - offset]);
     }
     //4 - это смещение текста относительно лев, верх прямоугольника фона
     
 }
+void PrintRow(int x, int y) {
+    int dy = 91;
+    MyTextKor(x, y, "1");
+    MyTextKor(x, y += dy, "2");
+    MyTextKor(x, y += dy, "3");
+    MyTextKor(x, y += dy, "4");
+    MyTextKor(x, y += dy, "5");
+    MyTextKor(x, y += dy, "6");
+    MyTextKor(x, y += dy, "7");
+    MyTextKor(x, y += dy, "8");
+
+
+}
+void MyText(int x, int y, const char* txt) {
+    HDC hDC = GetDC(hwnd);
+    SelectObject(hDC, font);
+    SetTextColor(hDC, RGB(0, 0, 0)); //цвет текста
+    //SetBkColor(hDC,RGB(0,255,255));// фон, если не использовать SetBkMode !
+    SetBkMode(hDC, TRANSPARENT);
+    TextOutA(hDC, x, y, txt, strlen(txt));
+    ReleaseDC(hwnd, hDC); // Освобождаем контекст устройства
+}
+void MyTextBl(int x, int y, const char* txt) {
+    HDC hDC = GetDC(hwnd);
+    SelectObject(hDC, font);
+    SetTextColor(hDC, RGB(13, 86, 166)); //цвет текста
+    //SetBkColor(hDC,RGB(0,255,255));// фон, если не использовать SetBkMode !
+    SetBkMode(hDC, TRANSPARENT);
+    TextOutA(hDC, x, y, txt, strlen(txt));
+    ReleaseDC(hwnd, hDC); // Освобождаем контекст устройства
+}
+void MyTextBIG(int x, int y, const char* txt) {
+    HDC hDC = GetDC(hwnd);
+    SelectObject(hDC, fontBIG);
+    SetTextColor(hDC, RGB(13, 86, 166));// цвет текста
+                                 //SetBkColor(hDC,RGB(0,255,255));// фон, если не использовать SetBkMode !
+    SetBkMode(hDC, TRANSPARENT);
+    TextOutA(hDC, x, y, txt, strlen(txt));
+    ReleaseDC(hwnd, hDC); // Освобождаем контекст устройства
+
+}
+void MyTextKor(int x, int y, const char* txt) {
+    HDC hDC = GetDC(hwnd);
+    SelectObject(hDC, fontKor);
+    SetTextColor(hDC, RGB(153, 102, 0));//цвет текста
+                                 //SetBkColor(hDC,RGB(0,255,255));// фон, если не использовать SetBkMode !
+    SetBkMode(hDC, TRANSPARENT);
+    TextOutA(hDC, x, y, txt, strlen(txt));
+    ReleaseDC(hwnd, hDC); // Освобождаем контекст устройства
+
+}
+// фоны
+HFONT font = CreateFont(20, 0, 0, 0,
+    FW_BOLD, FALSE, FALSE, FALSE,
+    ANSI_CHARSET, OUT_DEFAULT_PRECIS,
+    CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+    DEFAULT_PITCH | FF_ROMAN,
+    "Arial");
+
+HFONT fontBIG = CreateFont(55, 0, 0, 0,
+    FW_BOLD, FALSE, FALSE, FALSE,
+    ANSI_CHARSET, OUT_DEFAULT_PRECIS,
+    CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+    DEFAULT_PITCH | FF_ROMAN,
+    "Arial");
+HFONT fontKor = CreateFont(16, 16, 0, 0,
+    FW_BOLD, FALSE, FALSE, FALSE,
+    ANSI_CHARSET, OUT_DEFAULT_PRECIS,
+    CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+    DEFAULT_PITCH | FF_ROMAN,
+    "Arial");
+
+//"Times New Roman");

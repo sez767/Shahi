@@ -10,19 +10,16 @@
 #include "Chess.h"
 
 
-void MyText(int x, int y, const char* txt);
-
 int  width = 1300; //размер окна
 int  height = 800;
 int xPos, yPos;
+int matFlg = 0;
 
 /* консоль для ОТЛАДКИ
-
 void ShowConsoleWindow() {
     AllocConsole();
     freopen("CONOUT$", "wb", stdout);
     freopen("CONIN$", "rb", stdin);
-    // Заголовок консоли совпадает с полным именем exe-шника
     TCHAR fullName[MAX_PATH];
     GetModuleFileName(NULL, fullName, MAX_PATH);
     HWND hWnd = FindWindow(NULL, fullName);
@@ -36,6 +33,7 @@ void ShowConsoleWindow() {
     SetWindowPos(hWnd, HWND_TOP, 0, desktopArea.bottom - rect.bottom + rect.top, 0, 0, SWP_NOSIZE);
 }
 */
+
 //************* тут великий кусок стандартного коду для пыдключення GDI*****/////
 
 HDC hDC;
@@ -43,30 +41,6 @@ HDC hDC;
 HGLRC hGLRC;
 //ссылка на окно в котором будет происходить рисование
 HWND hwnd;
-
-// фоны, их потом перенесу
-HFONT font = CreateFont(20, 0, 0, 0,
-    FW_BOLD, FALSE, FALSE, FALSE,
-    ANSI_CHARSET, OUT_DEFAULT_PRECIS,
-	CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-	DEFAULT_PITCH | FF_ROMAN,
-    "Arial");
-
-HFONT fontBIG = CreateFont(60, 0, 0, 0,
-    FW_BOLD, FALSE, FALSE, FALSE,
-    ANSI_CHARSET, OUT_DEFAULT_PRECIS,
-    CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-    DEFAULT_PITCH | FF_ROMAN,
-    "Arial");
-HFONT fontKor = CreateFont(16, 16, 0, 0,
-    FW_BOLD, FALSE, FALSE, FALSE,
-    ANSI_CHARSET, OUT_DEFAULT_PRECIS,
-    CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-    DEFAULT_PITCH | FF_ROMAN,
-    "Arial");
-
-//"Times New Roman");
-
 /*  Declare Windows procedure  */
 LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
 
@@ -127,13 +101,10 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
 
     init_img();
     Shess_init();
-   
-
+    //ShowConsoleWindow();
     /* Make the window visible on the screen */
     ShowWindow (hwnd, nCmdShow);
-
-    //ShowConsoleWindow();//для отладки
-
+    
     /* Run the message loop. It will run until GetMessage() returns 0 */
     while (GetMessage (&messages, NULL, 0, 0))
     {
@@ -152,8 +123,7 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
 HBRUSH hBrush=CreateSolidBrush(RGB(0,255,0)); //задаём сплошную кисть, закрашенную цветом RGB
 HPEN pen= CreatePen(PS_NULL,0,0);
 
-Color ClrRamka(255,100,100,255);
-Color ClrRmkFon(255,240,240,240);
+
 
 /*  This function is called by the Windows function DispatchMessage()  */
 
@@ -172,91 +142,111 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
     int by = 120; // кнопки по высоте
     int hy = 50; // смещение справки по высоте
     int hx = 7; // смещение справки
-
-    switch (message)                  /* handle the messages */
-    {
-    // кнопки
+    
+ switch (message){                  /* handle the messages */
+    
+    // кнопки рисуем
     case WM_CREATE: 
         CreateWindow("button", "Move", WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE,
-            780, 560 + by, 140, 40, hwnd, (HMENU)3, NULL, NULL);
+            770, 570 + by, 110, 40, hwnd, (HMENU)3, NULL, NULL);
+        CreateWindow("button", "Random", WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE,
+            895, 570 + by, 110, 40, hwnd, (HMENU)4, NULL, NULL);
         CreateWindow("button","Quick calculate",WS_CHILD|BS_PUSHBUTTON|WS_VISIBLE,
-            950,560+by,140,40,hwnd,(HMENU)1,NULL,NULL);
+            1020,570+by,110,40,hwnd,(HMENU)1,NULL,NULL);
         CreateWindow("button","Reset",WS_CHILD|BS_PUSHBUTTON|WS_VISIBLE,
-            1120,560+by,140,40,hwnd,(HMENU)2,NULL,NULL);
+            1145,570+by,110,40,hwnd,(HMENU)2,NULL,NULL);
         break;
 
-    case WM_COMMAND:
+    case WM_COMMAND: // кнопки нажимаем
         wmId    = LOWORD(wParam);
         wmEvent = HIWORD(wParam);
-       
-        switch (wmId)
-        {
+        
+        switch (wmId){
             case 1: // нажата кнопка Quick
-                Make500Move();
-                Draw();
-                SetFocus(hwnd);
+                if (matFlg != 1) {
+                    Make500Move();
+                    Draw();
+                    SetFocus(hwnd);
+                }
                 break;
             case 2: // нажата кнопка Reset
                 Board.OnStart();
-                PlaySound("reset.wav", NULL, SND_ASYNC | SND_FILENAME);
-                DrawFonRect();
+                PlaySound("src/reset.wav", NULL, SND_ASYNC | SND_FILENAME);
+                //DrawFonRect();
                 Pmcnt = 0;
+                count = 1;
+                matFlg = 0;
                 Draw();
                 SetFocus(hwnd);
                 break;
             case 3: // нажата кнопка Move
-                 
-                MakeNextMove();
-                PlaySound("move.wav", NULL, SND_ASYNC | SND_FILENAME);
+                if (matFlg != 1) {
+                    MakeNextMove();
+                    PlaySound("src/move.wav", NULL, SND_ASYNC | SND_FILENAME);
+                    Draw();
+                    SetFocus(hwnd);
+                }
+                break;
+            case 4: // нажата кнопка Рандом
+                RandPosition();
+                tt_cnt = 0;
+                Pmcnt = 0;
+                count = 1;
                 Draw();
+                matFlg = 0;
+                PlaySound("src/move.wav", NULL, SND_ASYNC | SND_FILENAME);
                 SetFocus(hwnd);
+                 break;
                 
-
         }
         break;
-//гарячие клавиши      
-	case WM_KEYDOWN: //printf("Dn=%X\n",wParam);
+     
+	case WM_KEYDOWN: //гарячие клавиши 
 		switch(wParam) {
-        case 27: Board.OnStart();
-            PlaySound("reset.wav", NULL, SND_ASYNC | SND_FILENAME);
-            DrawFonRect(); tt_cnt = 0; Pmcnt = 0; Draw(); break;//esc
-        case 0x31: Board.SetPosition(&p5); WKing.CalcRP(&p5); WKing.KingCorrect(&p5);
-        //case 0x31: Board.SetPosition(&p5); WKing.CalcRP(&p5); BKing.CalcRP(&p5); WKing.KingCorrectM();
-            Draw(); WKing.DrawRP(); WKing.DrawCF(); break;
-        case 0x32: Board.SetPosition(&p5);BKing.CalcRP(&p5); BKing.KingCorrect(&p5);
-        //case 0x32: Board.SetPosition(&p5);BKing.CalcRP(&p5); WKing.CalcRP(&p5); BKing.KingCorrectM();
-            Draw(); BKing.DrawRP(); BKing.DrawCF();break;
-        case 0x33: Board.SetPosition(&p5); BSlon.CalcRP(&p5); BSlon.KingCorrect(&p5);
-            Draw(); BSlon.DrawRP(); BSlon.DrawCF();break;
-        case 0x34: Board.SetPosition(&p5); BTura.CalcRP(&p5); BTura.KingCorrect(&p5);
-            Draw();BTura.DrawRP(); BTura.DrawCF();break;
-        case 0x35: Board.SetPosition(&p5); BKonj.CalcRP(&p5); BKonj.KingCorrect(&p5);
-            Draw();BKonj.DrawRP(); BKonj.DrawCF();break;
+            case 27: Board.OnStart();
+                PlaySound("src/reset.wav", NULL, SND_ASYNC | SND_FILENAME);
+                DrawFonRect(); tt_cnt = 0; Pmcnt = 0; matFlg = 0; Draw(); break;//esc
+            case 0x31: Board.SetPosition(&p5); WKing.CalcRP(&p5); WKing.KingCorrect(&p5);
+                  Draw(); WKing.DrawRP(); WKing.DrawCF(); break;
+            case 0x32: Board.SetPosition(&p5);BKing.CalcRP(&p5); BKing.KingCorrect(&p5);
+                  Draw(); BKing.DrawRP(); BKing.DrawCF();break;
+            case 0x33: Board.SetPosition(&p5); BSlon.CalcRP(&p5); BSlon.KingCorrect(&p5);
+                Draw(); BSlon.DrawRP(); BSlon.DrawCF();break;
+            case 0x34: Board.SetPosition(&p5); BTura.CalcRP(&p5); BTura.KingCorrect(&p5);
+                Draw();BTura.DrawRP(); BTura.DrawCF();break;
+            case 0x35: Board.SetPosition(&p5); BKonj.CalcRP(&p5); BKonj.KingCorrect(&p5);
+                Draw();BKonj.DrawRP(); BKonj.DrawCF();break;
 
-
-        case 69: Evaluate(&Board);  break; // E
-        case 82: RandPosition(); DrawFonRect(); tt_cnt = 0; Pmcnt = 0; Draw(); break; // R
-        
+               // DrawFonRect();
+            case 69: Evaluate(&Board);  break; // E
+            case 82: RandPosition(); 
+                PlaySound("src/move.wav", NULL, SND_ASYNC | SND_FILENAME);
+                tt_cnt = 0; Pmcnt = 0; Draw();count = 1; matFlg = 0; break; // R
+            case 72:  H *= -1;
+                if (H == 1) { Bar(800, 20, 830, 50, Black); }
+                else { Bar(800, 20, 830, 50, White); } break; // h
            
-        case 72:  H *= -1; break; // h
-           
-        case 112: PrintHelp();  break; // F1 - help
-        case 0x20: MakeNextMove();
-            PlaySound("move.wav", NULL, SND_ASYNC | SND_FILENAME);
-            Draw(); break; // space
-        case 120:  Make500Move();Draw(); break; // F9
-        case 0x37: TestShess100_950();Draw(); break; // 7
-        case 115:  BackMove(); Draw(); break; //F4
-        case 114:  FirstMove(); Draw(); break; //F3
-        case 38: memo.offset++; memo.Draw(); break; // вверх
-        case 40: memo.offset--; memo.Draw(); break; // вниз
-
-        //case 83:  MyText(100, 300, "AAAAAAAAAAAAAAAAAAAAAA"); break;
-            //BestMove2();  break; // t test();
+            case 112: PrintHelp();  break; // F1 - help
+            case 0x20: if (matFlg != 1) {
+                MakeNextMove();
+                PlaySound("src/move.wav", NULL, SND_ASYNC | SND_FILENAME);
+                Draw();
+            }
+                break; // space
+            case 81:if (matFlg != 1) {
+                Make500Move();
+                Draw();
+            }
+                break; // Q
+            case 0x37: TestShess100_950();Draw(); break; // 7
+            case 115:  BackMove(); Draw(); Pmcnt--; break; //F4
+            case 114:  FirstMove(); Draw(); Pmcnt = 0; break; //F3
+            case 38: memo.offset++; memo.Draw(); break; // вверх
+            case 40: memo.offset--; memo.Draw(); break; // вниз
 		}
 		break;
 
-    case WM_LBUTTONDOWN: 
+    case WM_LBUTTONDOWN: //клик мышки
         MS_start=1;
         xPos = LOWORD(lParam);  // horizontal position of cursor 
         yPos = HIWORD(lParam);  // vertical position of cursor 
@@ -269,18 +259,18 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
         MS_start=0;
         if(q>=0 && q<5 && Board.InBoardRect(xPos,yPos))
             Board.SetFigCoord(xPos, yPos, q);//координати доски при видпускании кнопки
-        PlaySound("put.wav", NULL, SND_ASYNC | SND_FILENAME);
+        PlaySound("src/put.wav", NULL, SND_ASYNC | SND_FILENAME);
         Draw();
         break;
-        case WM_PAINT:
+
+     case WM_PAINT: // рисуем
 		BeginPaint(hwnd, &ps);
-
-		Draw();
-
-        Bar(890+hx, 10+hy, 1250+hx, 455+hy, ClrRmkFon);
-        RectAng(890 + hx, 10 + hy, 1250 + hx, 455 + hy, White); //ClrRamka);
-        PrintHelpInWindow(905, -10+hy);
-        MyTextBIG(910, 8, "Chess solver");
+        Draw();
+        Bar(890+hx, 30+hy, 1250+hx, 600+hy, ClrRmkFon);
+        RectAng(889 + hx, 30 + hy, 1250 + hx, 440 + hy, SwKorr); //ClrRamka;
+        PrintHelpInWindow(910, 10+hy);
+        MyTextBIG(910, 8, "INTITA  CHESS");
+        MyTextBl(1005, 58, "TASKS SOLVER");
         MyTextKor(50, 735, "A        B        C        D         E         F         G        H");
         PrintRow(737, 45);
         
@@ -309,53 +299,4 @@ void IniFonts(HDC hdc)
         OUT_OUTLINE_PRECIS,
         CLIP_DEFAULT_PRECIS,ANTIALIASED_QUALITY, VARIABLE_PITCH,TEXT("Arial"));
     SelectObject(hdc,hFont);
-}
-
-
-void MyText(int x, int y, const char* txt)
-{
-    HDC hDC = GetDC(hwnd);
-    SelectObject(hDC, font);
-    SetTextColor(hDC,RGB(0,0,0)); //цвет текста
-    //SetBkColor(hDC,RGB(0,255,255));// фон, если не использовать SetBkMode !
-    SetBkMode(hDC,TRANSPARENT);
-    TextOutA(hDC, x, y, txt, strlen(txt));
-    ReleaseDC(hwnd, hDC); // Освобождаем контекст устройства
-
-}
-
-void MyTextBIG(int x, int y, const char* txt)
-{
-    HDC hDC = GetDC(hwnd);
-    SelectObject(hDC, fontBIG);
-    SetTextColor(hDC,RGB(0,0,0));// цвет текста
-                                 //SetBkColor(hDC,RGB(0,255,255));// фон, если не использовать SetBkMode !
-    SetBkMode(hDC,TRANSPARENT);
-    TextOutA(hDC, x, y, txt, strlen(txt));
-    ReleaseDC(hwnd, hDC); // Освобождаем контекст устройства
-
-}
-void MyTextKor(int x, int y, const char* txt)
-{
-    HDC hDC = GetDC(hwnd);
-    SelectObject(hDC, fontKor);
-    SetTextColor(hDC, RGB(153, 102, 0));//цвет текста
-                                 //SetBkColor(hDC,RGB(0,255,255));// фон, если не использовать SetBkMode !
-    SetBkMode(hDC, TRANSPARENT);
-    TextOutA(hDC, x, y, txt, strlen(txt));
-    ReleaseDC(hwnd, hDC); // Освобождаем контекст устройства
-
-}
-void PrintRow(int x, int y) {
-    int dy = 91;
-    MyTextKor(x, y , "1");
-    MyTextKor(x, y += dy, "2");
-    MyTextKor(x, y += dy, "3");
-    MyTextKor(x, y += dy, "4");
-    MyTextKor(x, y += dy, "5");
-    MyTextKor(x, y += dy, "6");
-    MyTextKor(x, y += dy, "7");
-    MyTextKor(x, y += dy, "8");
-
-
 }

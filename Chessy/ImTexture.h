@@ -10,6 +10,9 @@ struct ImgTexture {
 };
 
 extern HFONT font;
+extern HFONT fontBIG;
+extern HFONT fontKor;
+
 
 struct TMemo10 {
     int x, y, w, h; // лев, верх, ширина, высота

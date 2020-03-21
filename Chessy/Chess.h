@@ -19,6 +19,8 @@ extern ImgTexture KonjBl_txr;
 extern ImgTexture KingBl_txr;
 extern ImgTexture KingWt_txr;
 extern int tt_cnt;
+extern int matFlg;//флаг для блока ходов после мата+
+extern int count;//флаг ходов для лога 
 
 struct FMove{ // координаты фигуры, также ход для известной фигуры
 	int x, y;
@@ -141,8 +143,7 @@ private:
 };
 
 
-struct TBoard
-{
+struct TBoard{
 	Color color_white=SwKorr;//коричневая красивее
 	Color color_black=Korr;
 	float x0, y0; // координаты лев верх края доски
@@ -212,9 +213,14 @@ extern int Pmcnt;
 void Make500Move();
 void TestShess100_950();
 void BackMove();
+void ShowConsoleWindow();
 void FirstMove();
 void PrintHelp();
+void PrintRow(int x, int y);
 int randInt(int min, int max);
 #define MIN_SCOR -19999999 //мин
 #define MAX_SCOR 19999999 //макс
 #define POS_WAS 10000000 // для двух ходов
+void MyText(int x, int y, const char* txt);
+void MyTextBIG(int x, int y, const char* txt);
+void MyTextKor(int x, int y, const char* txt);
