@@ -35,6 +35,8 @@ extern Color GrBlu;
 extern Color WinFon;
 extern Color ClrRamka;
 extern Color ClrRmkFon;
+extern Color GrBluBb;
+extern Color GrGreen;
 
 extern int Stop;
 

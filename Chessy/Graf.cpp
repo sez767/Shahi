@@ -18,8 +18,10 @@ Color GrBlu(191,191,255);//
 Color WinFon(200,200,200);
 Color ClrRamka(255, 100, 100, 255);
 Color ClrRmkFon(255, 240, 240, 240);
+Color GrBluBb(100, 255, 0, 0);
+Color GrGreen(100, 0, 255, 0);
 
-// тут стандарни ГДИ функции для малювання прямокутникив, лыный
+// тут стандарни ГДИ функции для малювання прямокутникив, текста, и поля МЕМО (для лога)
 
 void Bar(float SX,float SY,float EX,float EY, Color clr)
 {
@@ -40,17 +42,17 @@ void RectAng(float SX, float SY, float EX, float EY, Color clr){
     Graphics g(hdc);
     Pen      pen(clr,1);
     g.DrawRectangle(&pen, SX, SY, EX-SX, EY-SY);
-    ReleaseDC(hwnd, hdc); // Освобождаем контекст устройства
+    ReleaseDC(hwnd, hdc);
 }
 void Draw(){
     Board.DrawDisRect(0,70);
 	Shess_Draw();
 }
 
-TMemo10 memo(898, 520, 359, 120); // x,y,ширина, высота
+TMemo10 memo(897, 520, 360, 128); // x,y,ширина,высота
 void TMemo10::ClearBar(){
     Bar(x, y, x + w, y + h, ClrRmkFon); //WinFon
-// RectAng(x, y, x + w, y + h, цвет);
+RectAng(x, y, x + w, y + h, SwKorr);
 }
 
 void TMemo10::Clear()
@@ -118,7 +120,7 @@ void MyText(int x, int y, const char* txt) {
     //SetBkColor(hDC,RGB(0,255,255));// фон, если не использовать SetBkMode !
     SetBkMode(hDC, TRANSPARENT);
     TextOutA(hDC, x, y, txt, strlen(txt));
-    ReleaseDC(hwnd, hDC); // Освобождаем контекст устройства
+    ReleaseDC(hwnd, hDC); 
 }
 void MyTextBl(int x, int y, const char* txt) {
     HDC hDC = GetDC(hwnd);
@@ -127,7 +129,7 @@ void MyTextBl(int x, int y, const char* txt) {
     //SetBkColor(hDC,RGB(0,255,255));// фон, если не использовать SetBkMode !
     SetBkMode(hDC, TRANSPARENT);
     TextOutA(hDC, x, y, txt, strlen(txt));
-    ReleaseDC(hwnd, hDC); // Освобождаем контекст устройства
+    ReleaseDC(hwnd, hDC); 
 }
 void MyTextBIG(int x, int y, const char* txt) {
     HDC hDC = GetDC(hwnd);
@@ -136,7 +138,7 @@ void MyTextBIG(int x, int y, const char* txt) {
                                  //SetBkColor(hDC,RGB(0,255,255));// фон, если не использовать SetBkMode !
     SetBkMode(hDC, TRANSPARENT);
     TextOutA(hDC, x, y, txt, strlen(txt));
-    ReleaseDC(hwnd, hDC); // Освобождаем контекст устройства
+    ReleaseDC(hwnd, hDC); 
 
 }
 void MyTextKor(int x, int y, const char* txt) {

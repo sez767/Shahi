@@ -7,14 +7,13 @@
 //////////////мозг програмы////////
 
 int tt_cnt;//кол ходов
-int H=-1; // чей текущий ход (-1)-белых, +1-черных
+int H=-1; // чей текущий ход (-1)-б, +1-ч (старт с бел != часто при рандоме мат в 1 ход)
 
 // king all positions
 FMove KP[] = {{-1,0}, {-1,-1}, {0,-1}, {1,-1},  {1,0}, {1,1}, {0,1}, {-1,1}};
 
-// король, дае реально возможные ходы из данной позиции
-void TKing::CalcRP(const Position5* p)
-{
+// король, дает реально возможные ходы из данной позиции
+void TKing::CalcRP(const Position5* p){
 	Rcnt = 0;
 	Ccnt = 0;
 	if (Enbl == 0)return;
@@ -30,10 +29,13 @@ void TKing::CalcRP(const Position5* p)
 				if(color==Board.Fig[f]->color){  //своя
 					CF[Ccnt].x=px;
 					CF[Ccnt].y=py;
-					Ccnt++;continue;
+					Ccnt++;
+					continue;
 				}
 			}
-			RP[Rcnt].x=px; RP[Rcnt].y=py; Rcnt++;
+			RP[Rcnt].x=px;
+			RP[Rcnt].y=py;
+			Rcnt++;
 		}
 	}
 
@@ -79,15 +81,16 @@ bool Position5::OnOtherField(int ix, int iy, int no){
 		}
 		int on = Board.Fig[i]->On_RP_CF(ix, iy);
 		Board.GetPosition(pos); // назад
-		if (on){return true;}
+		if (on){
+			return true;
+		}
 	}
 	return false;
 
 }
 
 // поле не защищено своими
-bool Position5::NoProtected(int ix, int iy, int no) 
-{
+bool Position5::NoProtected(int ix, int iy, int no){
 	Position5 pos; Board.SetPosition(&pos); // mem
 	Board.GetPosition(this[0]);
 
@@ -116,17 +119,18 @@ bool Position5::NoProtected(int ix, int iy, int no)
 bool TFigure::On_RP_CF(int xx, int yy)
 {
 	for(int i=0;i<Rcnt;i++){
-		if(xx==RP[i].x && yy==RP[i].y)return true;
+		if(xx==RP[i].x && yy==RP[i].y)
+			return true;
 	}
 	for(int i=0;i<Ccnt;i++){
-		if(xx==CF[i].x && yy==CF[i].y)return true;
+		if(xx==CF[i].x && yy==CF[i].y)
+			return true;
 	}
 	return false;
 }
 
 FMove LP[] = {{-2,-1}, {-1,-2}, {1,-2},  {2,-1},  {2,1}, {1,2}, {-1,2}, {-2,1}};
-void TKonj::CalcRP(const Position5* p) // конь, дает реально возможные ходы из данной позиции
-{
+void TKonj::CalcRP(const Position5* p){ // конь, дает реально возможные ходы из данной позиции
 	Rcnt = 0;
 	Ccnt = 0;
 	if (Enbl == 0)return;
@@ -134,8 +138,7 @@ void TKonj::CalcRP(const Position5* p) // конь, дает реально возможные ходы из д
 	for(int i=0;i<8;i++){
 		int px = x + LP[i].x;
 		int py = y + LP[i].y;
-		if( px >=0 && px<8 && py>=0 && py<8) // только на доске
-		{
+		if( px >=0 && px<8 && py>=0 && py<8){ // только на доске
 			int f = p5.WhoIs(px, py);
 			if( f<5){ // здесь стоит фигура
 				if(color==Board.Fig[f]->color){
@@ -146,7 +149,9 @@ void TKonj::CalcRP(const Position5* p) // конь, дает реально возможные ходы из д
 				}
 				
 			}
-			RP[Rcnt].x=px; RP[Rcnt].y=py; Rcnt++;
+			RP[Rcnt].x=px;
+			RP[Rcnt].y=py;
+			Rcnt++;
 		}
 	}
 
@@ -167,22 +172,32 @@ void TTura::CalcRP(const Position5* p){ // тура, дает реально возможные ходы из 
 				Ccnt++;}
 			break;
 		}
-		RP[Rcnt].x=x; RP[Rcnt].y=i; Rcnt++;
+		RP[Rcnt].x=x; RP[Rcnt].y=i;
+		Rcnt++;
 	}
 
 	for(int i=y+1;i<8;i++){ // движение вниз
 		int f = p5.WhoIs(x, i);
 		if( f<5){ // здесь стоит фигура
-			if(color==Board.Fig[f]->color){CF[Ccnt].x=x; CF[Ccnt].y=i; Ccnt++;}
+			if(color==Board.Fig[f]->color){
+				CF[Ccnt].x=x;
+				CF[Ccnt].y=i;
+				Ccnt++;}
 			break;
 		}
-		RP[Rcnt].x=x; RP[Rcnt].y=i; Rcnt++;
+		RP[Rcnt].x=x;
+		RP[Rcnt].y=i;
+		Rcnt++;
 	}
 
 	for(int i=x+1;i<8;i++){ // движение вправо
 		int f = p5.WhoIs(i, y);
 		if( f<5){ // здесь стоит фигура
-			if(color==Board.Fig[f]->color){CF[Ccnt].x=i; CF[Ccnt].y=y; Ccnt++;}
+			if(color==Board.Fig[f]->color){
+				CF[Ccnt].x=i;
+				CF[Ccnt].y=y;
+				Ccnt++;
+			}
 			break;
 		}
 		RP[Rcnt].x=i; RP[Rcnt].y=y; Rcnt++;
@@ -191,16 +206,21 @@ void TTura::CalcRP(const Position5* p){ // тура, дает реально возможные ходы из 
 	for(int i=x-1;i>=0;i--){ // движение вливо
 		int f = p5.WhoIs(i, y);
 		if( f<5){ // здесь стоит фигура
-			if(color==Board.Fig[f]->color){CF[Ccnt].x=i; CF[Ccnt].y=y; Ccnt++;}
+			if(color==Board.Fig[f]->color){
+				CF[Ccnt].x=i;
+				CF[Ccnt].y=y;
+				Ccnt++;
+			}
 			break;
 		}
-		RP[Rcnt].x=i; RP[Rcnt].y=y; Rcnt++;
+		RP[Rcnt].x=i;
+		RP[Rcnt].y=y;
+		Rcnt++;
 	}
 
 }
 // Слон, дает реально возможные ходы из данной позиции
-void TSlon::CalcRP(const Position5* p)
-{
+void TSlon::CalcRP(const Position5* p){
 	Rcnt = 0;
 	Ccnt = 0;
 	Position5 p5 = *p;
@@ -209,7 +229,11 @@ void TSlon::CalcRP(const Position5* p)
 		if((x-i)<0 || (y-i)<0)break;
 		int f = p5.WhoIs(x-i, y-i);
 		if( f<5){ // здесь стоит фигура
-			if(color==Board.Fig[f]->color){CF[Ccnt].x=x-i; CF[Ccnt].y=y-i; Ccnt++;}
+			if(color==Board.Fig[f]->color){
+				CF[Ccnt].x=x-i;
+				CF[Ccnt].y=y-i;
+				Ccnt++;
+			}
 			break;
 		}
 		RP[Rcnt].x=x-i; RP[Rcnt].y=y-i; Rcnt++;
@@ -219,20 +243,32 @@ void TSlon::CalcRP(const Position5* p)
 		if((x+i)>7 || (y-i)<0)break;
 		int f = p5.WhoIs(x+i, y-i);
 		if( f<5){ // здесь стоит фигура
-			if(color==Board.Fig[f]->color){CF[Ccnt].x=x+i; CF[Ccnt].y=y-i; Ccnt++;}
+			if(color==Board.Fig[f]->color){
+				CF[Ccnt].x=x+i;
+				CF[Ccnt].y=y-i;
+				Ccnt++;
+			}
 			break;
 		}
-		RP[Rcnt].x=x+i; RP[Rcnt].y=y-i; Rcnt++;
+		RP[Rcnt].x=x+i; 
+		RP[Rcnt].y=y-i;
+		Rcnt++;
 	}
 
 	for(int i=1;i<8;i++){ // движение to right down
 		if((x+i)>7 || (y+i)>7)break;
 		int f = p5.WhoIs(x+i, y+i);
 		if( f<5){ // здесь стоит фигура
-			if(color==Board.Fig[f]->color){CF[Ccnt].x=x+i; CF[Ccnt].y=y+i; Ccnt++;}
+			if(color==Board.Fig[f]->color){
+				CF[Ccnt].x=x+i;
+				CF[Ccnt].y=y+i;
+				Ccnt++;
+			}
 			break;
 		}
-		RP[Rcnt].x=x+i; RP[Rcnt].y=y+i; Rcnt++;
+		RP[Rcnt].x=x+i;
+		RP[Rcnt].y=y+i;
+		Rcnt++;
 	}
 
 	for(int i=1;i<8;i++){ // движение to left down
@@ -245,14 +281,15 @@ void TSlon::CalcRP(const Position5* p)
 				Ccnt++;}
 			break;
 		}
-		RP[Rcnt].x=x-i; RP[Rcnt].y=y+i; Rcnt++;
+		RP[Rcnt].x=x-i;
+		RP[Rcnt].y=y+i;
+		Rcnt++;
 	}
 
 }
 
 // есть ли здесь с (то есть пересечение с фигурами на доске)
-bool Position5::IsHere(int ix, int iy)
-{
+bool Position5::IsHere(int ix, int iy){
 	for(int i=0;i<5;i++){
 		if (x[i] > 7)continue;
 		if (x[i] == ix && y[i] == iy) return true;
@@ -260,8 +297,7 @@ bool Position5::IsHere(int ix, int iy)
 	return false;
 }
 
-int Position5::WhoIs (int ix, int iy) // кто здесь, какая фигура
-{
+int Position5::WhoIs (int ix, int iy){ // кто здесь, какая фигура(доска выбора)
 	for(int i=0;i<5;i++){
 		if (x[i] > 7)continue;
 		if (x[i] == ix && y[i] == iy) return i; // ее номер
@@ -269,8 +305,7 @@ int Position5::WhoIs (int ix, int iy) // кто здесь, какая фигура
 	return 8; // нет фигур
 }
 
-int TBoard::WhoIs (int ix, int iy) // кто здесь, какая фигура  если >5 то нет ничего
-{
+int TBoard::WhoIs (int ix, int iy){ // (глав доска)кто здесь, какая фигура  если >5 то нет ничего
 	for(int i=0;i<5;i++){
 		if (Fig[i]->Enbl==0)continue;
 		if (Fig[i]->x == ix && Fig[i]->y == iy) return i; // ее номер
@@ -279,8 +314,7 @@ int TBoard::WhoIs (int ix, int iy) // кто здесь, какая фигура  если >5 то нет ни
 
 }
 
-void TBoard::CalcBMoves() // посчитать все RP для черных
-{
+void TBoard::CalcBMoves(){ // посчитать все RP для черных
 	Position5 p5;
 	SetPosition(&p5); // берем з доски
 	Fig[1]->CalcRP(&p5);
@@ -290,16 +324,14 @@ void TBoard::CalcBMoves() // посчитать все RP для черных
 	Fig[1]->KingCorrect(&p5);
 }
 
-void TBoard::CalcWMoves() // посчитать все RP для белых
-{
+void TBoard::CalcWMoves(){ // посчитать все RP для белых
 	Position5 p5;
 	SetPosition(&p5); // берем з доски
 	Fig[0]->CalcRP(&p5);
 	Fig[0]->KingCorrect(&p5);
 }
 
-int Mat()
-{
+int Mat(){
 	Position5 p5; 
 	Board.SetPosition(&p5); // берем з доски
 	Board.Fig[0]->CalcRP(&p5);
@@ -315,14 +347,8 @@ int Mat()
 
 }
 
-int Evaluate()
-{
-	return 0;
-}
-
-// всегда делается относительно черных !
-int Evaluate(TBoard* b)
-{
+// ОЦЕНКА...........всегда делается относительно черных
+int Evaluate(TBoard* b){
 	Position5 p5; 
 	b->SetPosition(&p5); // берем з доски
 
@@ -332,7 +358,6 @@ int Evaluate(TBoard* b)
 		if(H==1)return POS_WAS; 
 		else return -POS_WAS;
 	}
-	//---
 
 	int v = 0;
 	// материальный перевес
@@ -342,10 +367,9 @@ int Evaluate(TBoard* b)
 	if (b->Fig[3]->Enbl)v += 50; // тура
 	if (b->Fig[4]->Enbl)v += 30; // конь
 	
-
 	b->Fig[0]->CalcRP(&p5);
 	b->Fig[0]->KingCorrect(&p5);
-	// шах белому королю )
+	// шах белому королю
 	if (p5.OnOtherField(b->Fig[0]->x, b->Fig[0]->y, 0)){
 		// предвидение цейтнота белого короля для черных
 		if (b->Fig[0]->Rcnt == 0)
@@ -355,13 +379,12 @@ int Evaluate(TBoard* b)
 	}
 	else
 	{
-		// некуда ходить белому королю
+	// некуда ходить белому королю
 		if (b->Fig[0]->Rcnt ==0){
 			if (H == -1)v = 1000000; // для хода черных
 			else v = -1000000;
 		}
 	}
-	
 	// близость белого к черному королю
 	int dd = abs(b->Fig[0]->x - b->Fig[1]->x) + abs(b->Fig[0]->y - b->Fig[1]->y);
 	v += (14-dd);//4
@@ -381,7 +404,6 @@ int Evaluate(TBoard* b)
 
 			S = xL * yL; // left-top
 		}
-
 		if (xK > xL&& yK < yL) {
 			for (int x = xL + 1; x < 7; x++)if (b->Fig[1]->x == x && b->Fig[1]->y == yL)break;
 			for (int y = 0; y < yL; y++)if (b->Fig[1]->x == xL && b->Fig[1]->y == y)break;
@@ -392,7 +414,6 @@ int Evaluate(TBoard* b)
 
 			S = (7 - xL) * yL; // right-top
 		}
-
 		if (xK > xL&& yK > yL) {
 			for (int x = xL + 1; x < 7; x++)if (b->Fig[1]->x == x && b->Fig[1]->y == yL)break;
 			for (int y = yL + 1; y < 7; y++)if (b->Fig[1]->x == xL && b->Fig[1]->y == y)break;
@@ -436,9 +457,8 @@ int Evaluate(TBoard* b)
 int dbg;
 
 TMove NextMove(int& f, int &i){
-
 	TMove m;
-	m.x = 8; // end cycle
+	m.x = 8; //конец цыкла
 	int maxF;
 	if (H<0) maxF = 1;
 	else maxF = 5;
@@ -446,17 +466,21 @@ TMove NextMove(int& f, int &i){
 	for(;f < maxF; f++)	{
 		if (Board.Fig[f]->Enbl == 0)continue;
 		if (Board.Fig[f]->Rcnt == 0) {
-			if(f==0 && H==-1)m.x = 200; continue;  // ceitnot!!!!
-			if(f==1 && H==1)m.x = 200; continue;  // ceitnot!!!!
+			if(f==0 && H==-1)m.x = 200; continue;  // ceitnot
+			if(f==1 && H==1)m.x = 200; continue;  // ceitnot
 		}
 		m.i = f;
-		if (i < Board.Fig[f]->Rcnt)
-		{
+		if (i < Board.Fig[f]->Rcnt){
 			m.x = Board.Fig[f]->RP[i].x;
 			m.y = Board.Fig[f]->RP[i].y;
 			i++; 
-			if(i < Board.Fig[f]->Rcnt)break;
-			else { f++; i = 0; break; }
+			if(i < Board.Fig[f]->Rcnt)
+				break;
+			else {
+				f++;
+				i = 0;
+				break;
+			}
 		}
 
 	}
@@ -487,8 +511,7 @@ TMove BestMove()
 	Position5 MaxP_2; // отвечает позиции после MinMove2!!
 	Position5 MaxP_3;
 
-	while(1)
-	{
+	while(1){
 
 		TMove m1 = NextMove(f1,i1);  // посунули фигуру
 		if (m1.x > 7){Board.GetPosition(p5); break;} // конец перебора всех ходов
@@ -502,8 +525,7 @@ TMove BestMove()
 
 		H = -H0;
 		int f2=0, i2=0; if(H==1)f2=1;
-		while(1)
-		{
+		while(1){
 			TMove m2 = NextMove(f2,i2); 
 			if (m2.x > 7){Board.GetPosition(p5_1); break;} // конец перебора всех ходов
 			Move(&m2); CalcMoves();
@@ -516,8 +538,7 @@ TMove BestMove()
 
 			H = H0;
 			int f3=0, i3=0; if(H==1)f3=1;
-			while(1)
-			{
+			while(1){
 				TMove m3 = NextMove(f3,i3); 
 				if (m3.x > 7){Board.GetPosition(p5_2); break;} // ? re-- конец перебора всех ходов
 				Move(&m3); CalcMoves();
@@ -542,7 +563,8 @@ TMove BestMove()
 	return MaxMove1;
 }
 
-// МИН-МАКС  ,два уровня глубины (около тысяч позиций) полный перебор
+/// МИН-МАКС  ,два уровня глубины (около тысяч позиций) полный перебор
+
 TMove BestMove2(){
 	int MATT = 0;
 	int H0 = H; // H (цвет хода )
@@ -560,8 +582,7 @@ TMove BestMove2(){
 	MaxMove.x = 9; //- это просто инициализация
 	Position5 P_x; // tmp
 
- 	while(1)
-	{
+ 	while(1){
 		// первый уровень
 		H = H0;
 		TMove m1 = NextMove(f1,i1);  // посунули фигуру (ход первого уровня)
@@ -577,38 +598,40 @@ TMove BestMove2(){
 
 		H = -H0; // меняем цвет 
 		CalcMoves(); // просчет ходов
-		int f2=0, i2=0; if(H==1)f2=1; // выставление индексов перебора на начало
-		while(1)
-		{
+		int f2=0, i2=0;
+		if(H==1)f2=1; // выставление индексов перебора на начало
+		while(1){
 			TMove m2 = NextMove(f2,i2);  // очередной ход второго уровня
-			if (m2.x > 7)// конец перебора всех ходов
-			{ 
-				if (m2.x == 200){
+			if (m2.x > 7){ // конец перебора всех ходов
+			 	if (m2.x == 200){
 					Move(&m2); 
 					CalcMoves();
 					Board.SetPosition(&P_x); // берем з доски
 					if (P_x.OnOtherField(Board.Fig[0]->x, Board.Fig[0]->y, 0)){
 						MATT = 1;
-						break;}
+						break;
+					}
 					else MaxScore2 = MAX_SCOR; // ceitnot!
 
 
 				}
 				break;
 			} 
-			Move(&m2); CalcMoves();
+			Move(&m2);
+			CalcMoves();
 
 			int Score = Evaluate(&Board) * H; // оценка хода второго уровня
 			if (Score > MaxScore2){
 				MaxScore2 = Score;
-				MinMax2 = m1; }
+				MinMax2 = m1;
+			}
 
 			Board.GetPosition(p5_1);
 			CalcMoves(); // восстанавливаем подпозицию (потомка) первого уровня
 		}
-		//---------------------------------------------------------------------------------------
+		//
 		if (MATT) { 
-			printf("\n= MATT = !!!"); 
+			printf("\n= MATT ="); 
 			MaxMove = m1; 
 			H = H0;
 			Board.GetPosition(p5);
@@ -631,11 +654,11 @@ TMove BestMove2(){
 }
 
 
+
 // сделать ход (просто перемещение фигуры)
-void Move(TMove* pM)
-{
+void Move(TMove* pM){
 	if (pM->x > 7)
-		return; // !!!!!!! некуда ходить
+		return; // ! некуда ходить
 	int FigOp = Board.WhoIs(pM->x, pM->y); // фигура противника на этом месте
 	if (FigOp < 5)Board.Fig[FigOp]->Enbl = 0; // отключаем ее
 	// запись новых координат для данной фигуры
@@ -643,7 +666,6 @@ void Move(TMove* pM)
 	Board.Fig[pM->i]->y = pM->y;
 	
 }
-
 char figura[5][10] = {"W_Kor","B_Kor", "B_Slon", "B_Tura", "B_Kon"};
 int count = 1;
 int MakeNextMove(){
@@ -654,27 +676,29 @@ int MakeNextMove(){
 	memo.print("%d. %s moves to %c:%d \n", count,figura[m.i], (m.x)+65, (m.y)+1);///////////////////
 	Move(&m);
 	int mt = Mat();
-	if (mt == 1)
+	if (mt == 1){
 		if (H == 1) {
-		mov = mt; 
-		
-		//sprintf(txt,"MAT!!! in %d",tt_cnt); //halfways
-		//MyTextBIG(950, 600, txt);
-		PlaySound("src/mario.wav", NULL, SND_ASYNC | SND_FILENAME);
-		memo.print("   <<< MAT! >>> in %d halfmoves", count);
-		printf("\nMAT");
-		matFlg = 1;
+			mov = mt; 
+			//sprintf(txt,"MAT!!! in %d",tt_cnt); //halfways
+			//MyTextBIG(950, 600, txt);
+			PlaySound("src/mario.wav", NULL, SND_ASYNC | SND_FILENAME);
+			memo.print("   <<< MAT! >>> in %d halfmoves", count);
+			printf("\nMAT");
+			matFlg = 1;
+		}
 	}
-	if (mt==2)
-		if(H == 1){
-		mov = mt;
-		matFlg = 1;
-		//sprintf(txt, "Ceinot!   in  %d", tt_cnt);
-		//MyTextBIG(850, 600, txt);
-		memo.print("   <<< Ceinot! >>> in %d halfmoves", count);
-		PlaySound("src/mario.wav", NULL, SND_ASYNC | SND_FILENAME);
-		printf("\nCeitnot!!!");} 
-	
+	if (mt == 2) {
+		if (H == 1) {
+			mov = mt;
+			matFlg = 1;
+			//sprintf(txt, "Ceinot!   in  %d", tt_cnt);
+			//MyTextBIG(850, 600, txt);
+			memo.print("   <<< Ceinot! >>> in %d halfmoves", count);
+			PlaySound("src/mario.wav", NULL, SND_ASYNC | SND_FILENAME);
+			printf("\nCeitnot!!!");
+		}
+	}
+
 	SavePos();
 	H *= -1;
 	count++;
@@ -682,9 +706,8 @@ int MakeNextMove(){
 }
 
 int mm_cnt;
-
 void Make500Move(){
-	DrawFonRect();
+	//DrawFonRect();
 	SavePos();
 	Pmcnt = 0; // сброс индекса записи позиций
 	tt_cnt = 0;
@@ -708,12 +731,13 @@ void Make500Move(){
 	}
 
 	if(tt_cnt==950){
-		MyTextBIG(850, 600, "No end in 950 ...");
+		//MyTextBIG(850, 600, "No end in 950 ...");
+		memo.print("No end in 950 ...");
 	}
 	printf("\ntt_cnt=%d", tt_cnt);
 }
 
-// тест 100 партий до 950 ходов в КОНСОЛЬ
+// отладка -тест 100 партий до 950 ходов в КОНСОЛЬ
 void TestShess100_950()
 {
 	DrawFonRect();
@@ -723,5 +747,5 @@ void TestShess100_950()
 		RandPosition();
 		Make500Move();
 	}
-	printf("\n\nmm_cnt=%d", mm_cnt);
+	printf("\n\ncount hMoves= %d", mm_cnt);
 }

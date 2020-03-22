@@ -77,7 +77,7 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
     wincl.cbClsExtra = 0;                      /* No extra bytes after the window class */
     wincl.cbWndExtra = 0;                      /* structure or the window instance */
     /* Use Windows's default colour as the background of the window */
-    wincl.hbrBackground = (HBRUSH) COLOR_BACKGROUND;
+    wincl.hbrBackground = (HBRUSH)4;////COLOR_BACKGROUND
 
     /* Register the window class, and if it fails quit the program */
     if (!RegisterClassEx (&wincl))
@@ -89,7 +89,7 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
            szClassName,         /* Classname */
            _T("СhessSolver"),       /* Title Text */
            WS_OVERLAPPEDWINDOW, /* default window */
-           CW_USEDEFAULT,       /* Windows decides the position */
+           CW_USEDEFAULT,      /* Windows decides the position */// 
            CW_USEDEFAULT,       /* where the window ends up on the screen */
            width,                 /* The programs width */
            height,                 /* and height in pixels */
@@ -163,7 +163,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
         
         switch (wmId){
             case 1: // нажата кнопка Quick
-                if (matFlg != 1) {
+                if (matFlg != 1 && Board.Fig[1]->Enbl == 1 && Board.Fig[0]->Enbl == 1) {
                     Make500Move();
                     Draw();
                     SetFocus(hwnd);
@@ -180,7 +180,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                 SetFocus(hwnd);
                 break;
             case 3: // нажата кнопка Move
-                if (matFlg != 1) {
+                if (matFlg != 1 && Board.Fig[1]->Enbl == 1 && Board.Fig[0]->Enbl == 1) {
                     MakeNextMove();
                     PlaySound("src/move.wav", NULL, SND_ASYNC | SND_FILENAME);
                     Draw();
@@ -205,7 +205,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
 		switch(wParam) {
             case 27: Board.OnStart();
                 PlaySound("src/reset.wav", NULL, SND_ASYNC | SND_FILENAME);
-                DrawFonRect(); tt_cnt = 0; Pmcnt = 0; matFlg = 0; Draw(); break;//esc
+                tt_cnt = 0; Pmcnt = 0; matFlg = 0; Draw(); break;//esc
             case 0x31: Board.SetPosition(&p5); WKing.CalcRP(&p5); WKing.KingCorrect(&p5);
                   Draw(); WKing.DrawRP(); WKing.DrawCF(); break;
             case 0x32: Board.SetPosition(&p5);BKing.CalcRP(&p5); BKing.KingCorrect(&p5);
@@ -227,13 +227,13 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                 else { Bar(800, 20, 830, 50, White); } break; // h
            
             case 112: PrintHelp();  break; // F1 - help
-            case 0x20: if (matFlg != 1) {
+            case 0x20: if (matFlg != 1 && Board.Fig[1]->Enbl ==1 && Board.Fig[0]->Enbl == 1) {
                 MakeNextMove();
                 PlaySound("src/move.wav", NULL, SND_ASYNC | SND_FILENAME);
                 Draw();
             }
                 break; // space
-            case 81:if (matFlg != 1) {
+            case 81:if (matFlg != 1 && Board.Fig[1]->Enbl == 1 && Board.Fig[0]->Enbl == 1) {
                 Make500Move();
                 Draw();
             }

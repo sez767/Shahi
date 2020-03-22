@@ -20,7 +20,8 @@ extern ImgTexture KingBl_txr;
 extern ImgTexture KingWt_txr;
 extern int tt_cnt;
 extern int matFlg;//флаг для блока ходов после мата+
-extern int count;//флаг ходов для лога 
+extern int count;//флаг ходов для лога
+
 
 struct FMove{ // координаты фигуры, также ход для известной фигуры
 	int x, y;
@@ -166,6 +167,7 @@ struct TBoard{
 		color_white=SwKorr;
 		color_black=Korr;}
 	void DrawBoard();
+	int Koroli();
 	void Square(int sx, int sy);
 	void Square1(int sx, int sy);
 	void Draw(float dx, float dy){

@@ -66,8 +66,10 @@ int TBoard::FindFigOnMouse(int mx, int my){
 	return 7;
 }
 
-void TBoard::SetFigCoord(int mx, int my, int i){
-	Fig[i]->x = (mx-x0)/Size; Fig[i]->y = (my-y0)/Size; Fig[i]->Enbl = 1;
+void TBoard::SetFigCoord(int mx, int my, int i){ //ее коор на главной доске
+	Fig[i]->x = (mx-x0)/Size;
+	Fig[i]->y = (my-y0)/Size;
+	Fig[i]->Enbl = 1;
 }
 
 // берем координаты фигур из позиции p на доску (для отображения и управления) 
@@ -89,9 +91,6 @@ void TBoard::SetPosition(Position5* p){
 		p->y[i] = Fig[i]->y;
 	}
 }
-
-Color GrBluBb(100,255,0,0);
-Color GrGreen(100,0,255,0);
 
 void TBoard::Square(int sx, int sy){
 	Bar(x0+sx*Size, y0+sy*Size, x0+(sx+1)*Size, y0+(sy+1)*Size,GrBluBb);
