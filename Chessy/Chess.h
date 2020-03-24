@@ -13,34 +13,44 @@
 #define KING			5	// КОРОЛЬ
 #define EMPTY			6
 
+#define width 1300 //размеры окна програмки
+#define height 800
+
+#define MIN_SCOR -19999999 //мин
+#define MAX_SCOR 19999999 //макс
+#define POS_WAS 10000000 // для двух ходов
+
 extern ImgTexture SlonBl_txr;
 extern ImgTexture TuraBl_txr;
 extern ImgTexture KonjBl_txr;
 extern ImgTexture KingBl_txr;
 extern ImgTexture KingWt_txr;
-extern int tt_cnt;
+
+extern int tt_cnt;//кол полуходов
 extern int matFlg;//флаг для блока ходов после мата+
 extern int count;//флаг ходов для лога
-
+extern int ind;
 
 struct FMove{ // координаты фигуры, также ход для известной фигуры
 	int x, y;
-	FMove(int ix, int iy) {
+	FMove(int ix, int iy){
 		x = ix;
-		y = iy; }
-	FMove() {};
-	void Set(int ix, int iy) { 
+		y = iy;
+	}
+	FMove() {}; //конструктор по умолч
+	void Set(int ix, int iy){ 
 		x = ix; 
-		y = iy; }
+		y = iy;
+	}
 };
 
 struct Position5{
 	int x[5]; // координаты для жесткого массива фигур,
 	int y[5]; // определенного в Fig[5]
-	bool IsHere(int ix, int iy); // есть ли здесь с (то есть пересечение с фигурами на доске)
+	bool IsHere(int ix, int iy); // есть ли здесь стоит (пересечение с фигурами на доске)
 	int WhoIs (int ix, int iy); // кто здесь, какая фигура  если >5 то нет ничего
-	// под ударом или под контролем других фигур противника
-	bool OnOtherField(int ix, int iy, int no); 
+	///// под ударом или под контролем других фигур противника
+	bool OnOtherField(int ix, int iy, int no); //под контролем фигур противника
 	bool NoProtected(int ix, int iy, int no); // поле не защищено своими
 	bool IsEqual(Position5* ps);
 };
@@ -50,10 +60,8 @@ struct TMove{
 	int i;
 	int x, y;
 };
-extern int ind;
 
-class TFigure
-{
+class TFigure{
 public:
 	int x, y; // координаты 0-7
 	int Type; // // 5 - king, 3-tura, 2-slon, 1-kon
@@ -73,76 +81,61 @@ public:
 	bool On_RP_CF(int xx, int yy); 
 	void KingCorrect(Position5* p);
 	virtual void CalcRP(const Position5* p){} // дает реально возможные ходы из данной позиции
-	int OverlapOther(); // место фигуры совпадает с другой! (для рандомн тестирования)
-	void SetPos(float xf, float yf) { 
+	int OverlapOther(); // место фигуры совпадает с другой (для рандомн тестирования)
+	void SetPos(float xf, float yf){ 
 		x = xf,
 		y = yf;
 	}
 	TFigure(){
-		num = ind++;
+	num = ind++;
 	};
-	TFigure(ImgTexture* it) { 
+	TFigure(ImgTexture* it){ 
 		Img = it;
 		x = y = 0;
 		num = ind++; 
 	};
-	TFigure(ImgTexture* it, int col) {
+	TFigure(ImgTexture* it, int col){
 		Img = it;
 		x = y = 0;
 		color = col;
 		num = ind++;};
 	~TFigure(){};
-
 private:
-
 };
 
 
-class TKing : public TFigure
-{
+class TKing : public TFigure{
 public:
 	void CalcRP(const Position5* p); // дает реально возможные ходы из данной позиции
 	TKing() :TFigure(&KingWt_txr) { Type = KING; }
 	TKing(ImgTexture* it, int cl):TFigure(it,cl){Type = KING;}
 	~TKing(){}
-
 private:
-
 };
 
-class TSlon : public TFigure
-{
+class TSlon : public TFigure{
 public:
 	void CalcRP(const Position5* p); // дает реально возможные ходы из данной позиции
 	TSlon() :TFigure(&SlonBl_txr) { color = 1; Type=BISHOP; }
 	~TSlon(){Type=BISHOP;}
-
 private:
-
 };
 
-class TTura : public TFigure
-{
+class TTura : public TFigure{
 public:
 	void CalcRP(const Position5* p); // дает реально возможные ходы из данной позиции
 	TTura() :TFigure(&TuraBl_txr) { color = 1; Type = ROOK; }
 	~TTura(){Type = ROOK;}
-
 private:
-
 };
 
-class TKonj : public TFigure
-{
+class TKonj : public TFigure{
 public:
 	void CalcRP(const Position5* p); // дает реально возможные ходы из данной позиции
 	TKonj() :TFigure(&KonjBl_txr) { color = 1; Type = KNIGHT; }
 	~TKonj(){Type = KNIGHT;}
-
 private:
-
 };
-
 
 struct TBoard{
 	Color color_white=SwKorr;//коричневая красивее
@@ -153,7 +146,10 @@ struct TBoard{
 	void GetPosition(Position5 &p);
 	void SetPosition(Position5 *p);
 	int Count; // колич фигур на доске
-	void setPos(float x, float y) { x0 = x; y0 = y; }
+	void setPos(float x, float y) {
+		x0 = x;
+		y0 = y;
+	}
 	bool InDisRect(int mx, int my, int i); // мыша в квадрате i-й фигуры сбоку
 	bool InBoardRect(int mx, int my); // мыша на доске
 	void DrawDisRect(float x, float y);
@@ -162,10 +158,14 @@ struct TBoard{
 	void CalcBMoves(); // посчитать все RP для черных
 	void CalcWMoves(); // посчитать все RP для белых
 	int WhoIs (int ix, int iy); // кто здесь, какая фигура  если >5 то нет ничего
-	void OnStart() { for (int i = 0; i < Count; i++)Fig[i]->Enbl = 0; }
+	void OnStart() { 
+		for (int i = 0; i < Count; i++)
+			Fig[i]->Enbl = 0;
+	}
 	void InitColor(){
 		color_white=SwKorr;
-		color_black=Korr;}
+		color_black=Korr;
+	}
 	void DrawBoard();
 	int Koroli();
 	void Square(int sx, int sy);
@@ -176,7 +176,10 @@ struct TBoard{
 			else Fig[i]->DrawDis(Size,x0+dx,y0+dy);
 	};
 
-	TBoard() { x0 = y0 = 10; Size = 90; }
+	TBoard() {
+		x0 = y0 = 10;
+		Size = 90;
+	}
 	TBoard(TFigure* fg[], int cnt) { 
 		Count = cnt;
 		for (int i = 0; i < Count; i++)
@@ -190,20 +193,18 @@ struct TBoard{
 		x0 = x; y0 = y;
 		color_white=SwKorr;
 		color_black=Korr;
-
 	}
 
 };
 
+extern int H; // чей текущий ход (-1)-белых, +1-черных
 extern TBoard Board;
-
 extern TKing WKing; 
 extern TKing BKing;
 extern TSlon BSlon;
 extern TTura BTura;
 extern TKonj BKonj;
-
-extern int H; // чей текущий ход (-1)-белых, +1-черных
+extern int Pmcnt;
 TMove BestMove2();
 int Evaluate(TBoard* b);
 void Move(TMove* pM);
@@ -211,18 +212,12 @@ int MakeNextMove();
 void RandPosition();
 void SavePos();
 bool FindPos(Position5* ps);
-extern int Pmcnt;
 void Make500Move();
 void TestShess100_950();
 void BackMove();
-void ShowConsoleWindow();
-void FirstMove();
-void PrintHelp();
+void ShowConsoleWindow();//
 void PrintRow(int x, int y);
 int randInt(int min, int max);
-#define MIN_SCOR -19999999 //мин
-#define MAX_SCOR 19999999 //макс
-#define POS_WAS 10000000 // для двух ходов
 void MyText(int x, int y, const char* txt);
 void MyTextBIG(int x, int y, const char* txt);
 void MyTextKor(int x, int y, const char* txt);

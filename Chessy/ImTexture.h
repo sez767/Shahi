@@ -13,7 +13,6 @@ extern HFONT font;
 extern HFONT fontBIG;
 extern HFONT fontKor;
 
-
 struct TMemo10 {
     int x, y, w, h; // лев, верх, ширина, высота
     int dy = 20;
@@ -21,15 +20,9 @@ struct TMemo10 {
     int tp = 0; // top string
     int offset = 0; // смещение по клавишах
     char string[100][100]; // 100 строк по 100 символов
-    //Color Fon; // пока все это с MyText(...
-    //Color Ton;
-    //HFONT fnt;
     TMemo10(int ix, int iy, int iw, int ih) {
         x = ix, y = iy, w = iw, h = ih;
-        //Fon = WinFon; // по умолчанию
-        //Ton = Black;
-        //fnt = font;
-    }
+     }
     void Clear();
     void ClearBar();
     void print(const char* Format, ...);

@@ -10,7 +10,15 @@ ImgTexture TuraBl_txr;
 ImgTexture KonjBl_txr;
 ImgTexture KingBl_txr;
 ImgTexture KingWt_txr;
-
+TKing WKing;
+TKing BKing(&KingBl_txr, 1);
+TSlon BSlon;
+TTura BTura;
+TKonj BKonj;
+TFigure* FG[] = { &WKing, &BKing, &BSlon, &BTura, &BKonj };
+TBoard Board(FG, 5, 90, 10, 10);
+Position5 Pmem[1000];
+int Pmcnt;
 int ind;
 
 void init_img(){
@@ -19,11 +27,9 @@ void init_img(){
 	TuraBl_txr.LoadFromFile(L"src/Tura_bl.png");
 	KonjBl_txr.LoadFromFile(L"src/Konj_bl.png");
 	KingWt_txr.LoadFromFile(L"src/King_wt.png");
+}
 
-}//---------
-
-void TBoard::DrawBoard()
-{
+void TBoard::DrawBoard(){
 	for(int i=0; i<8;i+=2){//малюем доску, 8 на 8, через одну
 		for(int h=0; h<8;h+=2){
 			Bar(x0 + i * Size, y0 + h * Size, x0 + (i + 1) * Size, y0 + (h + 1) * Size, color_white);
@@ -36,8 +42,7 @@ void TBoard::DrawBoard()
 	RectAng(x0-2, y0-2, x0+Size*8+2, y0+Size*8+2, Korr);//рамочка =)
 }
 
-bool TBoard::InDisRect(int mx, int my, int i)// бокова область з фигурами
-{
+bool TBoard::InDisRect(int mx, int my, int i){ // бокова область з фигурами
 	my -= 70;
 	float num = Fig[i]->num;
 	if (mx >= (x0 + 8.5 * Size) && mx < (x0 + 9.5 * Size))
@@ -46,15 +51,14 @@ bool TBoard::InDisRect(int mx, int my, int i)// бокова область з фигурами
 	return false;
 }
 
-bool TBoard::InBoardRect(int mx, int my) // мыша на доске
-{
+bool TBoard::InBoardRect(int mx, int my){ // мыша на доске
 	if (mx > x0  &&  mx < (x0 + 8 * Size))
 		if (my > y0  && my < (y0 + 8 * Size))
 			return true;
 	return false;
 
 }
-void TBoard::DrawDisRect(float x, float y){// бокова область з фигурами
+void TBoard::DrawDisRect(float x, float y){// рисуем боковую область з фигурами
 	Bar(x+x0 + 8.5 * Size, y+y0 ,  x+x0 + 9.5 * Size, y+y0 + 5*Size, SwKorr);
 }
 
@@ -100,28 +104,18 @@ void TBoard::Square1(int sx, int sy){
 	Bar(x0+sx*Size, y0+sy*Size, x0+(sx+1)*Size, y0+(sy+1)*Size,GrGreen);
 }
 
-
-void TFigure::DrawRP(){
+void TFigure::DrawRP(){ //рисуем поля ходов
 	if (Enbl == 0)return;
 	for (int i = 0; i < Rcnt; i++)
 		Board.Square(RP[i].x, RP[i].y);
 }
 
-void TFigure::DrawCF(){
+void TFigure::DrawCF(){ //рисуем поля контроля
 	if (Enbl == 0)return;
 	for (int i = 0; i < Ccnt; i++)
 		Board.Square1(CF[i].x, CF[i].y);
 
 }
-
-TKing WKing; 
-TKing BKing(&KingBl_txr,1);
-TSlon BSlon;
-TTura BTura;
-TKonj BKonj;
-
-TFigure* FG[] = {&WKing, &BKing, &BSlon, &BTura, &BKonj};
-TBoard Board(FG, 5, 90, 10, 10);
 
 void Shess_init(){
 	Board.InitColor();
@@ -140,11 +134,10 @@ void Shess_Draw(){
 	Board.Draw(0,70);
 	if(H==1){Bar(800,20,830,50,Black);}
 	else {Bar(800,20,830,50,White); }
-
 }
 
 int randInt(int min, int max){
-	//srand(time(0));  //висне!!!
+	//srand(time(0));  //висне!!!!!
 	int r = rand() % (max - min + 1) + min;
 	return r;
 }
@@ -157,7 +150,7 @@ int TFigure::OverlapOther(){ // место фигуры совпадает с другой! (для рандомн те
 	return 0;
 }
 
-int PositionBad(){
+int PositionBad(){ //тоже для рандома
 	for(int i=0;i<5;i++){
 		if (Board.Fig[i]->OverlapOther())return 1;
 	}
@@ -176,8 +169,7 @@ void RandPosition(){ //рандом
 
 }
 
-bool Position5::IsEqual(Position5* ps)
-{
+bool Position5::IsEqual(Position5* ps){
 	for (int i = 0; i < 5; i++){
 		if (ps->x[i] > 7)continue;
 		if (x[i] != ps->x[i])return false;
@@ -187,16 +179,11 @@ bool Position5::IsEqual(Position5* ps)
 
 }
 
-Position5 Pmem[1000];
-int Pmcnt;
-
-void SavePos()
-{
+void SavePos(){
 	Board.SetPosition(&Pmem[Pmcnt++]);
 }
 
-bool FindPos(Position5* ps)
-{
+bool FindPos(Position5* ps){
 	for (int i = 0; i < Pmcnt; i++){
 		//if (ps->x[i] > 7)continue;
 		if (ps->IsEqual(&Pmem[i]))return true;
@@ -204,40 +191,18 @@ bool FindPos(Position5* ps)
 	return false;
 }
 
-void BackMove()
-{
+void BackMove(){ //отмена хода
 	if (Pmcnt < 2)return;
 	Pmcnt -= 2;
 	Board.GetPosition(Pmem[Pmcnt++]);
 }
 
-void FirstMove()
-{
-	Board.GetPosition(Pmem[0]);
-}
-
-void PrintHelp()//в консоль, вже не нада
-{
-	printf("\n\nF1 - help\nF9 - test 950 moves\nF4 - end-1 from memory");
-	printf("\nF3 - first move from memory\n7 - test random 100 games\nBlank - make next move");
-	printf("\nh - change color move (black-white)\nr - random position\nEsc - reset memory position");
-	printf("\n1 White King moves and Control filds");
-	printf("\n2 Black King moves and Control filds");
-	printf("\n3 Black BISHOP moves and Control filds");
-	printf("\n4 Black ROOK moves and Control filds");
-	printf("\n5 Black KNIGHT moves and Control filds");
-	printf("\ns - random position without ROOK");
-}
-
-void PrintHelpInWindow(int x, int y)
-{
+void PrintHelpInWindow(int x, int y){
 	int dy = 29; // расстояние между строками
 	char t0[] = "\n                      WELCOME";  MyText(x, y += dy, t0);
 	char t1[]="\nDRUG&DROP chessmans on board";  MyText(x, y+=dy, t1);
-	//char t6[]="\ntest test test"; MyText(x, y+=dy, t6);
 	char t17[] = "\nSPACE - make move"; MyText(x, y += dy, t17);
 	char t8[] = "\nR - random position";  MyText(x, y += dy, t8);
-	//char t3[]="\nF4 - move back";  MyText(x, y+=dy, t3);
 	char t2[]= "\nQ - quick results (to 950 halfmoves)"; MyText(x, y+=dy, t2);
 	char t8a[] = "\nESC - reset position";  MyText(x, y += dy, t8a);
 	char t4[]="\nUP - move log up"; MyText(x, y+=dy, t4);
@@ -248,7 +213,6 @@ void PrintHelpInWindow(int x, int y)
 	char t11[]="\n3 - Black bishop moves and control filds"; MyText(x, y+=dy, t11);
 	char t12[]="\n4 - Black rook moves and control filds";  MyText(x, y+=dy, t12);
 	char t13[]="\n5 - Black knight moves and control filds"; MyText(x, y+=dy, t13);
-	//char t33[] = "\n";  MyText(x, y += dy, t33);
 	char t5[]="\n\n MOVES :";  MyText(x, y+=dy, t5);
 
 }

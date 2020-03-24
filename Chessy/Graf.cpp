@@ -8,6 +8,8 @@
 #include "gdipluscolor.h"
 #include "Chess.h"
 
+// тут стандарни ГДИ функции для малювання прямокутникив, текста, и поля МЕМО (для лога)
+
 Color Blue(0,0,255);
 Color Green(0,255,0);
 Color White(255,255,255);
@@ -21,10 +23,7 @@ Color ClrRmkFon(255, 240, 240, 240);
 Color GrBluBb(100, 255, 0, 0);
 Color GrGreen(100, 0, 255, 0);
 
-// тут стандарни ГДИ функции для малювання прямокутникив, текста, и поля МЕМО (для лога)
-
-void Bar(float SX,float SY,float EX,float EY, Color clr)
-{
+void Bar(float SX,float SY,float EX,float EY, Color clr){
     RectF rct(SX, SY, EX-SX, EY-SY);
     HDC hdc = GetDC(hwnd);
     Graphics g(hdc);
@@ -50,19 +49,18 @@ void Draw(){
 }
 
 TMemo10 memo(897, 520, 360, 128); // x,y,ширина,высота
+
 void TMemo10::ClearBar(){
     Bar(x, y, x + w, y + h, ClrRmkFon); //WinFon
 RectAng(x, y, x + w, y + h, SwKorr);
 }
 
-void TMemo10::Clear()
-{
+void TMemo10::Clear(){
     ind = 0; tp = 0;
     ClearBar();
 }
 
-void TMemo10::print(const char* Format, ...)
-{
+void TMemo10::print(const char* Format, ...){
     //----printfs
     va_list ArgList;
     __crt_va_start(ArgList, Format);
@@ -79,8 +77,12 @@ void TMemo10::print(const char* Format, ...)
         ind = 100;
     }
 
-    if (ind > 5) { tp = ind - 5; }
-    else { if (ind == 100)tp = 92; }
+    if (ind > 5) { 
+        tp = ind - 5;
+    }
+    else {
+        if (ind == 100) tp = 92; 
+    }
 
     for (int i = 0; i < 7; i++) {
         MyText(x + 4, y + i * dy + 4, string[tp + i]);
@@ -88,8 +90,7 @@ void TMemo10::print(const char* Format, ...)
     offset = 0;
 }
 
-void TMemo10::Draw()
-{
+void TMemo10::Draw(){
     if (offset < 0)offset = 0;
     if (offset > 93)offset = 93;
     if ((tp - offset) < 0)offset = tp;
@@ -97,7 +98,7 @@ void TMemo10::Draw()
     for (int i = 0; i < 5; i++) {
         MyText(x + 4, y + i * dy + 4, string[tp + i - offset]);
     }
-    //4 - это смещение текста относительно лев, верх прямоугольника фона
+    //4 - это смещение текста относительно лев, верх
     
 }
 void PrintRow(int x, int y) {
@@ -110,8 +111,6 @@ void PrintRow(int x, int y) {
     MyTextKor(x, y += dy, "6");
     MyTextKor(x, y += dy, "7");
     MyTextKor(x, y += dy, "8");
-
-
 }
 void MyText(int x, int y, const char* txt) {
     HDC hDC = GetDC(hwnd);
@@ -165,11 +164,10 @@ HFONT fontBIG = CreateFont(55, 0, 0, 0,
     CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
     DEFAULT_PITCH | FF_ROMAN,
     "Arial");
+
 HFONT fontKor = CreateFont(16, 16, 0, 0,
     FW_BOLD, FALSE, FALSE, FALSE,
     ANSI_CHARSET, OUT_DEFAULT_PRECIS,
     CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
     DEFAULT_PITCH | FF_ROMAN,
     "Arial");
-
-//"Times New Roman");

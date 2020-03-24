@@ -4,16 +4,14 @@
 #include "./ImTexture.h"
 #include "Chess.h"
 
-//////////////мозг програмы////////
+/////////мозг програмы////////
 
 int tt_cnt;//кол ходов
 int H=-1; // чей текущий ход (-1)-б, +1-ч (старт с бел != часто при рандоме мат в 1 ход)
 
 // king all positions
 FMove KP[] = {{-1,0}, {-1,-1}, {0,-1}, {1,-1},  {1,0}, {1,1}, {0,1}, {-1,1}};
-
-// король, дает реально возможные ходы из данной позиции
-void TKing::CalcRP(const Position5* p){
+void TKing::CalcRP(const Position5* p){// король, дает реально возможные ходы из данной позиции
 	Rcnt = 0;
 	Ccnt = 0;
 	if (Enbl == 0)return;
@@ -42,8 +40,7 @@ void TKing::CalcRP(const Position5* p){
 }
 
 // выкидание полей, контролируемых вражескими фигурами (RP+CF) 
-void TFigure::KingCorrect(Position5* p)
-{
+void TFigure::KingCorrect(Position5* p){
 	if (Enbl == 0)return;
 	int c = 0;
 	for(int i=0;i<Rcnt;i++){
@@ -93,7 +90,6 @@ bool Position5::OnOtherField(int ix, int iy, int no){
 bool Position5::NoProtected(int ix, int iy, int no){
 	Position5 pos; Board.SetPosition(&pos); // mem
 	Board.GetPosition(this[0]);
-
 	for(int i=0;i<5;i++){
 		if (Board.Fig[no]->Enbl == 0)continue;
 		if (Board.Fig[i]->Enbl == 0)continue;
@@ -115,9 +111,7 @@ bool Position5::NoProtected(int ix, int iy, int no){
 
 }
 
-
-bool TFigure::On_RP_CF(int xx, int yy)
-{
+bool TFigure::On_RP_CF(int xx, int yy){
 	for(int i=0;i<Rcnt;i++){
 		if(xx==RP[i].x && yy==RP[i].y)
 			return true;
@@ -147,7 +141,6 @@ void TKonj::CalcRP(const Position5* p){ // конь, дает реально возможные ходы из 
 					Ccnt++;
 					continue;
 				}
-				
 			}
 			RP[Rcnt].x=px;
 			RP[Rcnt].y=py;
@@ -162,7 +155,6 @@ void TTura::CalcRP(const Position5* p){ // тура, дает реально возможные ходы из 
 	Ccnt = 0;
 	if (Enbl == 0) return;
 	Position5 p5 = *p;
-
 	for(int i=y-1;i>=0;i--){ // движение вверх
 		int f = p5.WhoIs(x, i);
 		if( f<5){ // здесь стоит фигура
@@ -217,10 +209,9 @@ void TTura::CalcRP(const Position5* p){ // тура, дает реально возможные ходы из 
 		RP[Rcnt].y=y;
 		Rcnt++;
 	}
-
 }
-// Слон, дает реально возможные ходы из данной позиции
-void TSlon::CalcRP(const Position5* p){
+
+void TSlon::CalcRP(const Position5* p){// Слон, дает реально возможные ходы из данной позиции
 	Rcnt = 0;
 	Ccnt = 0;
 	Position5 p5 = *p;
@@ -288,8 +279,7 @@ void TSlon::CalcRP(const Position5* p){
 
 }
 
-// есть ли здесь с (то есть пересечение с фигурами на доске)
-bool Position5::IsHere(int ix, int iy){
+bool Position5::IsHere(int ix, int iy){// есть ли здесь стоит др фигура
 	for(int i=0;i<5;i++){
 		if (x[i] > 7)continue;
 		if (x[i] == ix && y[i] == iy) return true;
@@ -351,14 +341,12 @@ int Mat(){
 int Evaluate(TBoard* b){
 	Position5 p5; 
 	b->SetPosition(&p5); // берем з доски
-
-	// якшо эта позиция уже была ---
+	// якшо эта позиция уже была
 	// и для черных и для белых 
 	if (FindPos(&p5)){
 		if(H==1)return POS_WAS; 
 		else return -POS_WAS;
 	}
-
 	int v = 0;
 	// материальный перевес
 	if (b->Fig[0]->Enbl == 0)v += 10000; // нет белого короля
@@ -437,11 +425,9 @@ int Evaluate(TBoard* b){
 		int qq = (49 - S) / 3;//2
 		if (S > 0)v += qq;
 	}
-
-
-	//===== не под ударом ли черные фигуры------
-	if(H==1)
-	{
+	
+	//не под ударом ли черные фигуры
+	if(H==1){
 		if (p5.OnOtherField(b->Fig[2]->x, b->Fig[2]->y, 2))// слон под ударом 
 			if(p5.NoProtected(b->Fig[2]->x, b->Fig[2]->y, 2))v -= 30;// фигура не защищена
 
@@ -454,7 +440,6 @@ int Evaluate(TBoard* b){
 
 	return v;
 }
-int dbg;
 
 TMove NextMove(int& f, int &i){
 	TMove m;
@@ -488,82 +473,12 @@ TMove NextMove(int& f, int &i){
 	return m;
 }
 
-void CalcMoves()
-{
+void CalcMoves(){
 	if (H == 1)Board.CalcBMoves();
 	else Board.CalcWMoves();
 } 
 
-//НЕ ГОТОВО***********************
-// три уровня глубины (около 10000 позиций) полный перебор
-TMove BestMove()
-{
-	int H0 = H; // H (цвет хода )
-	CalcMoves();
-	Position5 p5; // запоминаем исходную позицию
-	Board.SetPosition(&p5); // берем з доски
-
-	H = H0;
-	int MaxScore1 = MIN_SCOR;
-	TMove MaxMove1; MaxMove1.x = 9;
-	int f1=0, i1=0; if(H==1)f1=1;
-
-	Position5 MaxP_2; // отвечает позиции после MinMove2!!
-	Position5 MaxP_3;
-
-	while(1){
-
-		TMove m1 = NextMove(f1,i1);  // посунули фигуру
-		if (m1.x > 7){Board.GetPosition(p5); break;} // конец перебора всех ходов
-		Move(&m1); CalcMoves(); // очередной child
-
-		//---------------------------------------------------
-		Position5 p5_1;
-		Board.SetPosition(&p5_1); // берем з доски
-		int MinScore2 = MAX_SCOR;
-		TMove MinMove2; MinMove2.x = 9;
-
-		H = -H0;
-		int f2=0, i2=0; if(H==1)f2=1;
-		while(1){
-			TMove m2 = NextMove(f2,i2); 
-			if (m2.x > 7){Board.GetPosition(p5_1); break;} // конец перебора всех ходов
-			Move(&m2); CalcMoves();
-
-		    //---------------------------------------------------
-			Position5 p5_2;
-			Board.SetPosition(&p5_2); // берем з доски
-			int MaxScore3 = MIN_SCOR;
-			TMove MaxMove3; MaxMove3.x = 9;
-
-			H = H0;
-			int f3=0, i3=0; if(H==1)f3=1;
-			while(1){
-				TMove m3 = NextMove(f3,i3); 
-				if (m3.x > 7){Board.GetPosition(p5_2); break;} // ? re-- конец перебора всех ходов
-				Move(&m3); CalcMoves();
-				int Score = Evaluate(&Board)*H; // оценка хода
-				if (Score > MaxScore3){MaxScore3 = Score; MaxMove3 = m3; Board.SetPosition(&MaxP_3);} 
-				Board.GetPosition(p5_2); CalcMoves(); // восстанавливаем
-		
-			}
-			//---------------------------------------------------
-
-
-			if (MaxScore3 < MinScore2){MinScore2 = MaxScore3; MinMove2 = MaxMove3;} 
-			Board.GetPosition(p5_1); CalcMoves(); // восстанавливаем
-
-		}
-		//----------------------------------------------------
-
-		if (MinScore2 > MaxScore1){MaxScore1 = MinScore2; MaxMove1 = MinMove2; Board.SetPosition(&MaxP_2);} 
-		Board.GetPosition(p5); CalcMoves(); // восстанавливаем
-	}
-
-	return MaxMove1;
-}
-
-/// МИН-МАКС  ,два уровня глубины (около тысяч позиций) полный перебор
+/// МИН-МАКС, два уровня глубины (около 1000 позиций) полный перебор
 
 TMove BestMove2(){
 	int MATT = 0;
@@ -749,3 +664,22 @@ void TestShess100_950()
 	}
 	printf("\n\ncount hMoves= %d", mm_cnt);
 }
+/* консоль для ОТЛАДКИ
+void ShowConsoleWindow() {
+	AllocConsole();
+	freopen("CONOUT$", "wb", stdout);
+	freopen("CONIN$", "rb", stdin);
+	TCHAR fullName[MAX_PATH];
+	GetModuleFileName(NULL, fullName, MAX_PATH);
+	HWND hWnd = FindWindow(NULL, fullName);
+	SetConsoleTitle(_T("Attached to workGL.exe"));
+	RECT rect;
+	GetWindowRect(hWnd, &rect);
+	//Shell_TrayWnd
+	RECT desktopArea;
+	SystemParametersInfo(SPI_GETWORKAREA, 0, &desktopArea, 0);
+
+	SetWindowPos(hWnd, HWND_TOP, 0, desktopArea.bottom - rect.bottom + rect.top, 0, 0, SWP_NOSIZE);
+}
+*/
+
