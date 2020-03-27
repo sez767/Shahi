@@ -5,8 +5,6 @@
 #endif
 
 #include "workGL.h"
-#include <tchar.h>
-#include <stdio.h>
 #include "Chess.h"
 
 //***** тут большой кусок стандартного коду для подключения GDI+ и окон виндовс/////
@@ -58,7 +56,7 @@ int WINAPI WinMain (HINSTANCE hThisInstance, HINSTANCE hPrevInstance,
     hwnd = CreateWindowEx (
            0,                   /* Extended possibilites for variation */
            szClassName,         /* Classname */
-           _T("СhessSolver"),   /* Title Text */
+           _T("СhessSolver"),   /* имя */
            WS_OVERLAPPEDWINDOW, /* default window */
            CW_USEDEFAULT,      /* Windows decides the position */// 
            CW_USEDEFAULT,       /* where the window ends up on the screen */
@@ -116,14 +114,12 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message,
     WPARAM wParam, LPARAM lParam){
     int wmId, wmEvent;
 	PAINTSTRUCT ps;
-    //int xPos, yPos;
     static int MS_start=0;
     static int q=0;
     char txt[30];
 
     TKing *pk;
     Position5 p5;
-
     int by = 120; // кнопки по высоте
     int hy = 50; // смещение справки по высоте
     int hx = 7; // смещение справки

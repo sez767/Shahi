@@ -1,42 +1,14 @@
-﻿  Chess.cpp
-C:\Users\Sez\Documents\GitTest\Chessy\Chess.h(86,7): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Chess.h(87,7): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Chess.cpp(588,7): warning C4101: txt: неиспользованная локальная переменная
-  ChessGraf.cpp
-C:\Users\Sez\Documents\GitTest\Chessy\Chess.h(86,7): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Chess.h(87,7): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\ChessGraf.cpp(47,12): warning C4244: инициализация: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\ChessGraf.cpp(62,38): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\ChessGraf.cpp(62,11): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\ChessGraf.cpp(74,21): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\ChessGraf.cpp(75,21): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-  Graf.cpp
-C:\Users\Sez\Documents\GitTest\Chessy\Chess.h(86,7): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Chess.h(87,7): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Graf.cpp(54,24): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Graf.cpp(54,17): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Graf.cpp(54,12): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Graf.cpp(54,9): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Graf.cpp(55,24): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Graf.cpp(55,17): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Graf.cpp(55,12): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Graf.cpp(55,9): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Graf.cpp(73,1): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\string.h(133): message : см. объявление "strcpy"
-C:\Users\Sez\Documents\GitTest\Chessy\Graf.cpp(76,1): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\string.h(133): message : см. объявление "strcpy"
-  main.cpp
-C:\Users\Sez\Documents\GitTest\Chessy\Chess.h(86,7): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\Chess.h(87,7): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(241,40): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(241,32): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(241,23): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(241,16): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(242,51): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(242,41): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(242,30): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(242,21): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(124,12): warning C4101: pk: неиспользованная локальная переменная
-C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(122,10): warning C4101: txt: неиспользованная локальная переменная
-  Создание кода...
+﻿  main.cpp
+C:\Users\Sez\Documents\GitTest\Chessy\Chess.h(89,7): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+C:\Users\Sez\Documents\GitTest\Chessy\Chess.h(90,7): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(239,40): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(239,32): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(239,23): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(239,16): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(240,51): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(240,41): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(240,30): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(240,21): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(122,12): warning C4101: pk: неиспользованная локальная переменная
+C:\Users\Sez\Documents\GitTest\Chessy\main.cpp(120,10): warning C4101: txt: неиспользованная локальная переменная
   IntitChess.vcxproj -> C:\Users\Sez\Documents\GitTest\Chessy\Debug\ChessSm.exe

@@ -123,8 +123,9 @@ bool TFigure::On_RP_CF(int xx, int yy){
 	return false;
 }
 
+// конь, дает реально возможные ходы из данной позиции
 FMove LP[] = {{-2,-1}, {-1,-2}, {1,-2},  {2,-1},  {2,1}, {1,2}, {-1,2}, {-2,1}};
-void TKonj::CalcRP(const Position5* p){ // конь, дает реально возможные ходы из данной позиции
+void TKonj::CalcRP(const Position5* p){ 
 	Rcnt = 0;
 	Ccnt = 0;
 	if (Enbl == 0)return;
@@ -150,11 +151,13 @@ void TKonj::CalcRP(const Position5* p){ // конь, дает реально возможные ходы из 
 
 }
 
-void TTura::CalcRP(const Position5* p){ // тура, дает реально возможные ходы из данной позиции
+// тура, дает реально возможные ходы из данной позиции
+void TTura::CalcRP(const Position5* p){ 
 	Rcnt = 0;
 	Ccnt = 0;
 	if (Enbl == 0) return;
 	Position5 p5 = *p;
+	
 	for(int i=y-1;i>=0;i--){ // движение вверх
 		int f = p5.WhoIs(x, i);
 		if( f<5){ // здесь стоит фигура
@@ -211,7 +214,8 @@ void TTura::CalcRP(const Position5* p){ // тура, дает реально возможные ходы из 
 	}
 }
 
-void TSlon::CalcRP(const Position5* p){// Слон, дает реально возможные ходы из данной позиции
+// Слон, дает реально возможные ходы из данной позиции
+void TSlon::CalcRP(const Position5* p){
 	Rcnt = 0;
 	Ccnt = 0;
 	Position5 p5 = *p;
@@ -227,7 +231,9 @@ void TSlon::CalcRP(const Position5* p){// Слон, дает реально возможные ходы из д
 			}
 			break;
 		}
-		RP[Rcnt].x=x-i; RP[Rcnt].y=y-i; Rcnt++;
+		RP[Rcnt].x=x-i;
+		RP[Rcnt].y=y-i;
+		Rcnt++;
 	}
 
 	for(int i=1;i<8;i++){ // движение to right top
@@ -337,7 +343,7 @@ int Mat(){
 
 }
 
-// ОЦЕНКА...........всегда делается относительно черных
+// ОЦЕНКА....всегда делается относительно черных
 int Evaluate(TBoard* b){
 	Position5 p5; 
 	b->SetPosition(&p5); // берем з доски
