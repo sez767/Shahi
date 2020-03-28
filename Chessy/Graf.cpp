@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "Chess.h"
+#include "TBoard.h"
 
 // тут стандарни ГДИ функции для малювання прямокутникив, текста, и поля МЕМО (для лога)
 

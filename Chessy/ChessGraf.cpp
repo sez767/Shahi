@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "./ImTexture.h"
-#include "Chess.h"
+#include "TBoard.h"
 
 ImgTexture SlonBl_txr;
 ImgTexture TuraBl_txr;
@@ -103,19 +103,6 @@ void TBoard::Square1(int sx, int sy){
 	Bar(x0+sx*Size, y0+sy*Size, x0+(sx+1)*Size, y0+(sy+1)*Size,GrGreen);
 }
 
-void TFigure::DrawRP(){ //рисуем поля ходов
-	if (Enbl == 0)return;
-	for (int i = 0; i < Rcnt; i++)
-		Board.Square(RP[i].x, RP[i].y);
-}
-
-void TFigure::DrawCF(){ //рисуем поля контроля
-	if (Enbl == 0)return;
-	for (int i = 0; i < Ccnt; i++)
-		Board.Square1(CF[i].x, CF[i].y);
-
-}
-
 void Shess_init(){
 	Board.InitColor();
 	BKing.SetPos(0, 3);
@@ -139,14 +126,6 @@ int randInt(int min, int max){
 	//srand(time(0));  //висне!!!!!
 	int r = rand() % (max - min + 1) + min;
 	return r;
-}
-
-int TFigure::OverlapOther(){ // место фигуры совпадает с другой! (для рандомн тестирования)
-		for(int i=0;i<5;i++){
-		if (i == num)continue;
-		if (x == Board.Fig[i]->x && y == Board.Fig[i]->y) return 1;
-	}
-	return 0;
 }
 
 int PositionBad(){ //тоже для рандома

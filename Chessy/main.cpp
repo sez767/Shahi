@@ -7,7 +7,8 @@
 #include <tchar.h>
 #include <stdio.h>
 #include "workGL.h"
-#include "Chess.h"
+
+#include "TBoard.h"
 
 //***** тут большой кусок стандартного коду для подключения GDI+ и окон виндовс/////
 

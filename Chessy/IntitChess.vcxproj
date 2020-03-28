@@ -75,9 +75,22 @@
     <ClCompile Include="Graf.cpp" />
     <ClCompile Include="imgTexture.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TBoard.cpp" />
+    <ClCompile Include="Classes/TFigure.cpp" />
+    <ClCompile Include="Classes/TKing.cpp" />
+    <ClCompile Include="Classes/TKonj.cpp" />
+    <ClCompile Include="Classes/TSlon.cpp" />
+    <ClCompile Include="Classes/TTura.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImTexture.h" />
+<ClInclude Include="Chess.h" />
+<ClInclude Include="TBoard.h" />
+<ClInclude Include="Classes/TFigure.h" />
+<ClInclude Include="Classes/TKing.h" />
+<ClInclude Include="Classes/TKonj.h" />
+<ClInclude Include="Classes/TSlon.h" />
+<ClInclude Include="Classes/TTura.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
