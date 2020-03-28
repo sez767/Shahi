@@ -1,11 +1,14 @@
 #include "workGL.h"
-#include <stdio.h>
-#include <stdlib.h>
+
 #include "gdiplusbrush.h"
 #include "gdiplusgraphics.h"
 #include "gdiplusgpstubs.h"
 #include "gdipluspen.h"
 #include "gdipluscolor.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "Chess.h"
 
 // тут стандарни ГДИ функции для малювання прямокутникив, текста, и поля МЕМО (для лога)

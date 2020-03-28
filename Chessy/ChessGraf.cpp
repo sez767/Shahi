@@ -1,7 +1,6 @@
 #include "workGL.h"
 #include <stdio.h>
 #include <math.h>
-#include <time.h>
 #include "./ImTexture.h"
 #include "Chess.h"
 

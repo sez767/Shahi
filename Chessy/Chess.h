@@ -1,12 +1,10 @@
 #pragma once
+
 #include "gdiplusbrush.h"
 #include "gdiplusgraphics.h"
 #include "gdiplusgpstubs.h"
 #include "gdipluspen.h"
 #include "./ImTexture.h"
-#include "workGL.h"
-#include <tchar.h>
-#include <stdio.h>
 
 #define PAWN			0	
 #define KNIGHT			1   // конь
