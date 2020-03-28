@@ -9,12 +9,6 @@
 #include "workGL.h"
 #include "Chess.h"
 
-#if defined(_MSC_VER)//в Релизе требует библиотеки гди-плюс и винмм для Плейсаунд
-#pragma comment(lib, "winmm.lib")
-#pragma comment(lib, "shlwapi.lib") 
-#pragma comment(lib, "gdiplus.lib")
-#endif
-
 //***** тут большой кусок стандартного коду для подключения GDI+ и окон виндовс/////
 
 HDC hDC; //ссылка на OpenGL
