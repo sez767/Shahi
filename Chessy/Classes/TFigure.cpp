@@ -16,7 +16,7 @@ void TFigure::DrawCF(){ //рисуем поля контроля
 
 }
 
-bool TFigure::On_RP_CF(int xx, int yy){
+bool TFigure::On_RP_CF(int xx, int yy){//под контролем или боем ли
 	for(int i=0;i<Rcnt;i++){
 		if(xx==RP[i].x && yy==RP[i].y)
 			return true;
@@ -28,7 +28,7 @@ bool TFigure::On_RP_CF(int xx, int yy){
 	return false;
 }
 
-// выкидание полей, контролируемых вражескими фигурами (RP+CF) 
+// для короля, выкидание полей, контролируемых вражескими фигурами (RP+CF) 
 void TFigure::KingCorrect(Position5* p){
 	if (Enbl == 0)return;
 	int c = 0;
@@ -47,7 +47,8 @@ void TFigure::KingCorrect(Position5* p){
 	Rcnt=c;
 }
 
-int TFigure::OverlapOther(){ // место фигуры совпадает с другой! (для рандомн тестирования)
+// место фигуры совпадает с другой! (для рандомн тестирования)
+int TFigure::OverlapOther(){ 
 	for(int i=0;i<5;i++){
 		if (i == num)continue;
 		if (x == Board.Fig[i]->x && y == Board.Fig[i]->y) return 1;
