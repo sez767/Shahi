@@ -95,10 +95,10 @@ void TMemo10::print(const char* Format, ...){
 
 void TMemo10::Draw(){
     if (offset < 0)offset = 0;
-    if (offset > 93)offset = 93;
-    if ((tp - offset) < 0)offset = tp;
+    if (offset > (100 - N))offset = 100 - N;
+    if ((tp - offset) < 0)offset = tp; // fixxx!
     ClearBar();
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < N; i++) {
         MyText(x + 4, y + i * dy + 4, string[tp + i - offset]);
     }
     //4 - это смещение текста относительно лев, верх

@@ -7,7 +7,7 @@
 #include <tchar.h>
 #include <stdio.h>
 #include "workGL.h"
-
+#include "Chess.h"
 #include "TBoard.h"
 
 //***** тут большой кусок стандартного коду для подключения GDI+ и окон виндовс/////
@@ -49,7 +49,7 @@ int WINAPI WinMain (HINSTANCE hThisInstance, HINSTANCE hPrevInstance,
     wincl.cbClsExtra = 0;                      /* No extra bytes after the window class */
     wincl.cbWndExtra = 0;                      /* structure or the window instance */
     /* Use Windows's default colour as the background of the window */
-    wincl.hbrBackground = (HBRUSH)4;////COLOR_BACKGROUND
+    wincl.hbrBackground = (HBRUSH) 4;////COLOR_BACKGROUND
 
     /* Register the window class, and if it fails quit the program */
     if (!RegisterClassEx (&wincl))
@@ -155,7 +155,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message,
             case 2: // нажата кнопка Reset
                 Board.OnStart();
                 PlaySound("src/reset.wav", NULL, SND_ASYNC | SND_FILENAME);
-                //DrawFonRect();
+                DrawFonRect();//
                 Pmcnt = 0;
                 count = 1;
                 matFlg = 0;

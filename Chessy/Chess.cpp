@@ -243,17 +243,15 @@ int MakeNextMove(){
 	char txt[100];
 	TMove m = BestMove2();
 	int mov = m.x;
-	memo.print("%d. %s moves to %c:%d \n", count,figura[m.i], (m.x)+65, (m.y)+1);///////////////////
+	memo.print("%d. %s moves to %c:%d \n", count,figura[m.i], (m.x)+65, (m.y)+1);
 	Move(&m);
 	int mt = Mat();
 	if (mt == 1){
 		if (H == 1) {
 			mov = mt; 
-			//sprintf(txt,"MAT!!! in %d",tt_cnt); //halfways
-			//MyTextBIG(950, 600, txt);
 			PlaySound("src/mario.wav", NULL, SND_ASYNC | SND_FILENAME);
 			memo.print("   <<< MAT! >>> in %d halfmoves", count);
-			printf("\nMAT");
+			//printf("\nMAT");
 			matFlg = 1;
 		}
 	}

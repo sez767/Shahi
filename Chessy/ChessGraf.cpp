@@ -178,7 +178,7 @@ void BackMove(){ //отмена хода
 void PrintHelpInWindow(int x, int y){
 	int dy = 29; // расстояние между строками
 	char t0[] = "\n                      WELCOME";  MyText(x, y += dy, t0);
-	char t1[]="\nDRUG&DROP chessmans on board";  MyText(x, y+=dy, t1);
+	char t1[]="\nDRUG&DROP chessmen on the board";  MyText(x, y+=dy, t1);
 	char t17[] = "\nSPACE - make move"; MyText(x, y += dy, t17);
 	char t8[] = "\nR - random position";  MyText(x, y += dy, t8);
 	char t2[]= "\nQ - quick results (to 950 halfmoves)"; MyText(x, y+=dy, t2);
